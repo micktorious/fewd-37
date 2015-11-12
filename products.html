@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Acme Corp - Home</title>
+    <style media="screen">
+    body {
+          background-color: rgb(226, 226, 226);
+          background-image: url("http://cloud.avandamiri.com/image/3N410e2Q2Z3F/background.png");
+          font-family: 'Lucida Grande', sans-serif;
+          margin: 0px;
+        }
+        header {
+          background-color: rgb(196, 196, 196);
+          border-bottom: 1px solid rgb(132, 132, 132);
+          border-top: 1px solid rgb(132, 132, 132);
+          padding-top: 0px;
+          padding-left: 15px;
+          box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1);
+        }
+        nav img {
+          padding-top: 20px;
+          padding-bottom: 20px;
+        }
+        ul.navbuttons {
+          float: right;
+          padding-top: 30px;
+        }
+        ul.navbuttons li {
+          list-style-type: none;
+          text-shadow: 2px;
+          display: inline;
+          padding: 0px 5px 0px 10px;
+          margin: 20px;
+        }
+        ul.signup {
+          list-style-type: none;
+        }
+        a {
+          font-size: 20px;
+          color: white;
+          text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.2);
+        }
+        input[type=button] {
+          box-sizing: content-box;
+          color: white;
+          font-size: 20px;
+          padding: 12px;
+          text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.2);
+          background-color: rgb(42, 76, 179);
+          box-shadow: none !important;
+          text-decoration: none;
+          box-shadow: none;
+          border: 2px solid rgb(67, 86, 139);
+          border-radius: 4px;
+          font-family: 'lucida grande', sans-serif;
+        }
+        main {
+          background-color: white;
+          border: 1px solid rgb(196, 196, 196);
+          border-radius: 10px;
+          padding-top: 10px;
+          padding-bottom: 10px;
+          max-width: 700px;
+          width: 80%;
+          margin: 50px auto 50px;
+          box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        main section {
+          width: 80%;
+          max-width: 560px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        main section section {
+          margin-left: auto;
+          margin-right: auto;
+          max-width: max-width: 560px;
+        }
+        hr {
+          color: rgba(0, 0, 0, .1);
+          max-width: 700px;
+          width: 80%;
+          margin: 50px auto 50px;
+          box-shadow: 0px .5px 0px rgba(255, 255, 255, 1);
+        }
+        footer p {
+          color: grey;
+          text-align: center;
+          text-shadow: 0px 1px 0px rgba(255, 255, 255, 1);
+          font-size: 15px;
+          padding-bottom: 10%;;
+        }
+        .prodphoto {
+          float: left;
+          margin-right: 20px;
+          width: 150px;
+        }
+        .productinfo {
+          padding: 0px 20px 20px 20px;
+        }
+        .button {
+          box-sizing: content-box;
+          list-style-type: none;
+          text-decoration: none;
+          border-radius: 4px;
+          font-family: 'lucida grande', sans-serif;
+          font-size: 15px;
+          color: white;
+          background-color: blue;
+          border: none;
+          padding: 5px 10px 5px 10px;
+        }
+        .buttonsecondary {
+          color: blue;
+          background-color: white;
+          border: 1px solid blue;
+        }
+        @media screen and (max-width: 635px) {
+        }
+        }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <img src="http://cloud.avandamiri.com/image/423B1n2p2v0U/acme-corp.jpg" alt="Logo"/>
+        <ul style="list-style-type: none" class="navbuttons">
+          <li><a href="#" style="text-decoration: none">Products</a></li>
+          <li><input type="button" name="Sign Up" value="Sign Up"></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section>
+        <h1>Products</h1>
+        <p>
+          For a full list of products, please visit The Original Illustrated Catalog of ACME Products.
+        </p>
+        <section>
+          <img class="prodphoto" src="http://acme.com/catalog/aspirin.jpg" alt="Product1">
+          <div class="productinfo">
+            <p>ACME is the leading producer of acetylsalicylic acid, a fine remedy for aches, pains, and fever. </p>
+            <button class="button buttonsecondary" >Details</button>
+            <button class="button" >Add to Cart</button>
+        </section>
+        <section>
+          <img class="prodphoto" src="http://acme.com/catalog/instantgirl.jpg" alt="Product2">
+          <div class="productinfo">
+            <p>The ACME House Brand of Instant Girl can provide an escort quickly and discreetly,
+without fear of embarrassment.</p>
+            <button class="button buttonsecondary" >Details</button>
+            <button class="button" >Add to Cart</button>
+          </div>
+        </section>
+        <section>
+          <img class="prodphoto" src="http://acme.com/catalog/birdseed.jpg" alt="Product3">
+          <div class="productinfo">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>
+            <button class="button buttonsecondary" >Details</button>
+            <button class="button" >Add to Cart</button>
+            <br><br><br><br><br><br><br>
+          </div>
+        </section>
+      </section>
+    </main>
+  </body>
+</html>
