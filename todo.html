@@ -1,0 +1,26 @@
+<!--
+create a new <li>
+set text content to ____
+get the <ul>
+append the new <li> to it
+ -->
+
+<ul class="theclass">
+
+</ul>
+
+<script type="text/javascript">
+function createNewListItem (textContent) {
+  // create a new <li>
+  var newListItem = document.createElement("li");
+  // set its textContent to whatever you want
+  newListItem.textContent = textContent;
+  // get the <ul>
+  var parentList = document.querySelector("ul");
+  // append the new <li> to it
+  parentList.appendChild(newListItem);
+}
+createNewListItem("Whaterver I want");
+createNewListItem("something else");
+
+</script>
