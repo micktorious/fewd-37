@@ -1,0 +1,25 @@
+<style media="screen">
+  .done {
+    color: gray;
+    text-decoration: line-through;
+  }
+</style>
+
+<ul>
+  <li class="done">one</li>
+  <li>two</li>
+  <li>three</li>
+</ul>
+
+<script type="text/javascript">
+  var listItem = document.querySelector("li");
+
+  listItem.setAttribute("id", "first-list-item");
+  // listItem.setAttribute("style", "color: red");
+
+  // listItem.addEventListener("click", itemClicked);
+
+  function itemClicked(event) {
+    listItem.classList.add("done");
+  }
+</script>
