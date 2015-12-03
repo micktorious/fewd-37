@@ -1,0 +1,115 @@
+<main>
+  <form id="new-todo-item-form">
+    <input type="text" id="new-todo-item-input" placeholder="What do you need to do?">
+    <button type="submit">Create</button>
+  </form>
+
+  <ul id="todo-list">
+    <!-- <li>
+      <label>
+        <input type="checkbox">
+        <span id="theToDoItem">0</span>
+      </label>
+    </li> -->
+  </ul>
+</main>
+
+<script>
+// Variables
+  var button = document.querySelector("button");
+
+// Event Listeners
+  button.addEventListener("click", addListItem);
+
+// Function
+  function addListItem (event) {
+    event.preventDefault();
+
+    var newCommentText = document.getElementById("new-todo-item-input").value;
+
+    var theToDoList = document.getElementById("todo-list");
+
+    var newListItemContainer = document.createElement("label");
+    theToDoList.appendChild(newListItemContainer);
+
+    var newListItem = document.createElement("li");
+    newListItemContainer.appendChild(newListItem);
+
+    var checkbox = document.createElement("input");
+    checkbox.setAttribute("type", "checkbox");
+    checkbox.setAttribute("id", "theCheckbox")
+    newListItem.appendChild(checkbox);
+
+    var newCommentContainer = document.createElement("span")
+    // newCommentContainer.setAttribute("id", "theToDoItem");
+    newListItem.appendChild(newCommentContainer);
+
+    newCommentContainer.textContent = newCommentText;
+
+  }
+
+
+
+</script>
+
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #f1f0f5;
+    font-family: sans-serif;
+    font-size: 18px;
+    line-height: 1.4em;
+  }
+  main {
+    margin: 2em auto;
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
+    background: white;
+    padding: 2em 3em;
+    max-width: 600px;
+  }
+  input,
+  button {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom-width: 2px;
+    border-radius: 5px; font-size: inherit;
+    padding: .5em 1em;
+    cursor: pointer;
+  }
+  #new-todo-item-input {
+    width: 70%;
+  }
+  button {
+    color: white;
+    width: 28%;
+    background-color: #049cd8;
+  }
+  form,
+  ul {
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+  ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  li {
+    margin-top: 0.75em;
+    padding-top: 0.75em;
+  }
+  li span {
+    margin-left: 0.5em;
+  }
+  label {
+    cursor: pointer;
+  }
+  #theCheckbox:checked + span {
+    color: grey;
+    text-decoration: line-through;
+  }
+
+  /* input:checked {
+    text-decoration: line-through;
+    color: grey;*/
+  }
+</style>
