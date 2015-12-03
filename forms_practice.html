@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Forms</title>
+    <style media="screen">
+      .field-title {
+        width: 100px;
+        display: inline-block;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <form>
+        <div type="form-row">
+          <label>
+            <span class="field-title">Name:</span>
+            <input type="text" id="name" tabindex="1">
+          </label>
+        </div>
+        <div type="form-row">
+          <label>
+            <span class="field-title">Email:</span>
+            <input type="text" id="email" tabindex="2">
+          </label>
+        </div>
+        <div type="form-row">
+          <label>
+            <span class="field-title">Phone:</span>
+            <input type="text" id="phone" tabindex="3">
+          </label>
+        </div>
+        <div type="form-row">
+          <label>
+            <span class="field-title">Job:</span>
+            <select tabindex="4">
+              <option value="" disabled selected>Select One...</option>
+              <option>Designer</option>
+              <option>Engineer</option>
+              <option>Other</option>
+            </select>
+          </label>
+        </div>
+        <div type="form-row">
+          <label>
+            <input type="checkbox" tabindex="5">
+            Agree to Terms
+          </label>
+        </div>
+        <div type="form-row">
+          <label>
+            <input type="Submit" value="Save" tabindex="6">
+          </label>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

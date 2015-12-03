@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Acem Corp JS</title>
+    <link rel="stylesheet" href="homework1stylesheet.css" media="screen">
+  </head>
+  <body>
+    <script type="text/javascript">
+      var header = document.createElement("header");
+      var body = document.querySelector("body");
+      body.appendChild(header);
+
+      var nav = document.createElement("nav");
+      header.appendChild(nav);
+
+      var img = document.createElement("img");
+      img.setAttribute("src", "http://cloud.avandamiri.com/image/423B1n2p2v0U/acme-corp.jpg")
+      nav.appendChild(img);
+
+      var siteNav = document.createElement("ul");
+      siteNav.setAttribute("class", "navbuttons");
+
+      nav.appendChild(siteNav);
+
+      var productsItem = document.createElement("li");
+      productsItem.setAttribute("class", "listitem");
+      siteNav.appendChild(productsItem);
+
+      var productsButton = document.createElement("a");
+      productsButton.textContent = "Products";
+      productsItem.appendChild(productsButton);
+
+      var signUpButton = document.createElement("li");
+      signUpButton.setAttribute("class", "button");
+      signUpButton.textContent = "Sign Up";
+      siteNav.appendChild(signUpButton);
+
+      var main = document.createElement("main");
+      body.appendChild(main);
+
+      var section = document.createElement("section");
+      main.appendChild(section)
+
+      var heading = document.createElement("h1");
+      heading.textContent = "Welcome to Acme Corp";
+      section.appendChild(heading);
+
+      var firstParagraph = document.createElement("p");
+      firstParagraph.textContent = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.";
+      section.appendChild(firstParagraph);
+
+      var secondParagraph = document.createElement("p");
+      secondParagraph.textContent = "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+      section.appendChild(secondParagraph);
+
+      var footer = document.createElement("footer");
+      body.appendChild(footer);
+
+      var lineDivider = document.createElement("hr");
+      footer.appendChild(lineDivider);
+
+      var theCopyright = document.createElement("p");
+      theCopyright.textContent = "Copyright, 2015";
+      footer.appendChild(theCopyright);
+
+    </script>
+  </body>
+</html>
