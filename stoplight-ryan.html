@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Ryan's Stoplight</title>
+    <style media="screen">
+      .lightbox {
+        background-color: rgb(242,197,0);
+        border-radius: 50px;
+        width: 300px;
+        height: 600px;
+        margin: 50px auto;
+        border: 3px solid;
+        border-color: rgb(220,178,3);
+      }
+      .light {
+        width: 154px;
+        height: 150px;
+        margin: 30px auto;
+        border-color: #000000;
+        border-style: solid;
+        border-radius: 100%;
+        border-top-width: 8px;
+        border-right-width: 2px;
+        border-bottom-width: 2px;
+        border-left-width: 2px;
+        box-shadow: inset 0px 10px 10px rgba(0, 0, 0, 0.1);
+      }
+      .green-light-on {
+        background-color: rgb(0,186,82);
+        box-shadow: 0px 0px 50px rgba(0,186,82,.5);
+        transition-duration: 300ms;
+        -webkit-transition-duration: 300ms;
+      }
+      .green-light-off {
+        background-color: rgb(111,87,0);
+        transition-duration: 300ms;
+        -webkit-transition-duration: 300ms;
+      }
+      .yellow-light-on {
+        background-color: rgb(255,234,45);
+        box-shadow: 0px 0px 50px rgba(255,234,45,.5);
+        transition-duration: 300ms;
+        -webkit-transition-duration: 300ms;
+      }
+      .yellow-light-off {
+        background-color: rgb(111,87,0);
+        transition-duration: 300ms;
+        -webkit-transition-duration: 300ms;
+      }
+      .red-light-on {
+        background-color: rgb(227, 65, 45);
+        box-shadow: 0px 0px 50px rgba(227, 65, 45,.5);
+        transition-duration: 300ms;
+        -webkit-transition-duration: 300ms;
+      }
+      .red-light-off {
+        background-color: rgb(111,87,0);
+        transition-duration: 300ms;
+        -webkit-transition-duration: 300ms;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="stop">Stop</button>
+    <button id="slow">Slow</button>
+    <button id="go">Go</button>
+    <button id="caution">Caution</button>
+
+    <div class="lightbox">
+      <div id="red" class="light red-light-off">
+
+      </div>
+      <div id="yellow" class="light yellow-light-off">
+
+      </div>
+      <div id="green" class="light yellow-light-off">
+
+      </div>
+    </div>
+    <script type="text/javascript">
+    // buttons
+      var stopButton = document.getElementById("stop");
+      var slowButton = document.getElementById("slow");
+      var goButton = document.getElementById("go");
+      var cautionButton = document.getElementById("caution");
+
+    // lights
+      var redLight = document.querySelector("#red");
+      var yellowLight = document.getElementById("yellow");
+      var greenLight = document.getElementById("green");
+
+    // event listeners
+      slowButton.addEventListener("click", turnLightYellow);
+      stopButton.addEventListener("click", turnLightRed);
+      goButton.addEventListener("click", turnLightGreen);
+
+    // functions
+      function turnLightRed (event) {
+        event.preventDefault();
+        redLight.setAttribute("class", "light red-light-on");
+        yellowLight.setAttribute("class", "light yellow-light-off");
+        greenLight.setAttribute("class", "light green-light-off");
+
+      }
+      function turnLightYellow (event) {
+        event.preventDefault();
+        yellowLight.setAttribute("class", "light yellow-light-on");
+        greenLight.setAttribute("class", "light green-light-off");
+        redLight.setAttribute("class", "light red-light-off");
+      }
+      function turnLightGreen (event) {
+        event.preventDefault();
+        greenLight.setAttribute("class", "light green-light-on");
+        yellowLight.setAttribute("class", "light yellow-light-off");
+        redLight.setAttribute("class", "light red-light-off");
+
+      }
+
+    </script>
+  </body>
+</html>
