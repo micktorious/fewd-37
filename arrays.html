@@ -1,0 +1,72 @@
+<style media="screen">
+  .highlight {
+    color: red;
+  }
+  .lowlight {
+    color: lightgrey;
+  }
+</style>
+<p>
+  There are <span id="count">0</span> students in the class:
+</p>
+
+<ol>
+</ol>
+
+<script>
+var students = [
+  "Allison",
+  "Amanda",
+  "Angela",
+  "Bora",
+  "Brad",
+  "Cack",
+  "David",
+  "David",
+  "Denise",
+  "Diana",
+  "Emily",
+  "Eric",
+  "Fernando",
+  "Gina",
+  "Guillermo",
+  "Jake",
+  "JC",
+  "Jessica",
+  "Kathryn",
+  "Kuulei",
+  "Laci",
+  "Lila",
+  "Lindsey",
+  "Madison",
+  "Megan",
+  "My",
+  "Nicholas",
+  "Oleg",
+  "Pegah",
+  "Ryan",
+  "Serge",
+  "Yiqian"
+];
+</script>
+
+<script>
+// Your code goes here:
+// 1. Add each student to the main <ol>
+// 2. Change the 0 to reflect the number of students in the array
+
+  for (var i = 0; i < students.length; i++) {
+    var list = document.querySelector("ol");
+    var newItem = document.createElement("li")
+    list.appendChild(newItem);
+    newItem.textContent=students[i];
+    if (students[i]%2==0) {
+      newItem.setAttribute("class", "lowlight");
+    }
+    // if (students[i]==="Ryan") {
+    //   newItem.setAttribute("class", "highlight");
+    // }
+  }
+  var span = document.querySelector("#count")
+  span.textContent=students.length;
+</script>
