@@ -45,7 +45,7 @@ function resultsReceived(results) {
     movie.appendChild(movieTitleDiv);
     movieTitleDiv.setAttribute("class", "movie-title");
     var movieTitle = document.createElement("a");
-    movieTitle.setAttribute("href", results["Search"][i]["imdbID"]);
+    movieTitle.setAttribute("href", "http://www.imdb.com/title/" + results["Search"][i]["imdbID"]);
     movieTitle.textContent = results["Search"][i]["Title"]
     movieTitle.setAttribute("class", "movie-title")
     movieTitleDiv.appendChild(movieTitle);
