@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Chat</title>
+
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: #f1f0f5;
+        font-family: sans-serif;
+        font-size: 18px;
+        line-height: 1.4em;
+
+      }
+      input,
+      button {
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-bottom-width: 2px;
+        border-radius: 5px; font-size: inherit;
+        cursor: pointer;
+      }
+      #newChat {
+        min-width: 80%;
+        padding: 20px;
+        margin: 20px;
+        float: left;
+      }
+      form button {
+        color: white;
+        width: auto;
+        background-color: #049cd8;
+        padding: 20px;
+        margin: 20px;
+      }
+      .footer {
+        height: 100px;
+        background-color: red;
+        bottom: 0px;
+        left: 0px;
+      }
+    </style>
+
+
+  </head>
+  <body>
+    <ul>
+
+    </ul>
+    <div class="footer">
+      <form id="chatEntryBox">
+        <input type="text" id="newChat" placeholder="Write Message...">
+        <button type="submit">Send</button>
+      </form>
+    </div>
+    <!-- Include Firebase's JS library on your page (at the top) -->
+    <script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
+    <script type="text/javascript">
+      // Connect to the Firebase DB
+      var firebase = new Firebase("https://blinding-inferno-7422.firebaseio.com");
+      var form = document.getElementById("chatEntryBox")
+
+      // Event Listener
+      form.addEventListener("submit", sendChatMessage);
+
+      function sendChatMessage(event) {
+        event.preventDefault();
+        var message = {
+          'username': prompt("What is your user name?"),
+          'messageBody': document.getElementById("newChat").value,
+          'createdAt': (new Date()).getTime()
+        }
+        localStorage.setItem("username", message['username']);
+        firebase.push(message);
+        form.reset();
+      }
+          // "on" is just like "addEventListener", it accepts an event type and function as arguments
+    firebase.on("child_added", createMessageFromFirebase);
+
+    // This function will get called for every chat message in the database
+    function createMessageFromFirebase(snapshot) {
+      // The snapshot gives you access to the message data
+      // messageData holds the username and body of the each message in the database
+      var messageData = snapshot.val();
+
+      // Now you can create a new element and set its textContent from the data
+      var messageEl = document.createElement("div");
+      messageEl.classList.add("message");
+      messageEl.textContent = messageData.messageBody;
+      var chatList = document.querySelector("ul");
+      chatList.appendChild(messageEl);
+      // Not pictured: creating the element you need to house the username
+      // (and maybe date if you're feeling adventurous)
+    }
+
+    </script>
+  </body>
+</html>
