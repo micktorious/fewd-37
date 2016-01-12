@@ -1,0 +1,34 @@
+<style media="screen">
+  .circle {
+    height: 100px;
+    width: 100px;
+    border-radius: 100%;
+    background-color: red;
+    position: fixed;
+    top: 0%;
+    left: 0%;
+    animation: bouncing 1s infinite alternate;
+  }
+
+  @keyframes bouncing {
+    0% {
+      top: 0%;
+      left: 0%;
+      bottom: 100%;
+      right: 100%;
+      -webkit-transform-origin: 100% 100% 0;
+    }
+    100% {
+      top: 100%;
+      left: 100%;
+      bottom: 0%;
+      right: 0%;
+      -webkit-transform-origin: -100% -100% 0;
+    }
+  }
+
+</style>
+
+<div class="circle">
+
+</div>

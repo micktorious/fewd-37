@@ -3,27 +3,38 @@
   body {
     font-family: 'Open Sans', sans-serif;
   }
-  .winningHand {
-    color: green;
+  .breakdown {
+    text-decoration: none;
+    list-style-type: none;
+    font-size: .5em;
+    color: grey;
+    display: inline;
+    float: left;
+  }
+  .total {
     text-decoration: none;
     list-style-type: none;
     font-size: 3em;
     font-weight: 800;
   }
+  .winningHand {
+    color: green;
+  }
   .losingHand {
     color: rgba(204, 0, 0, 1);;
-    text-decoration: none;
-    list-style-type: none;
-    font-size: 3em;
-    font-weight: 800;
   }
 </style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
-<ul id="scores">
+<table id="scores">
+  <tbody>
+    <tr>
 
-</ul>
+    </tr>
+  </tbody>
+</table>
+
 <form action="index.html">
   Score: <input type="text" id="score">
   Wager: <input type="text" id="wager">
@@ -51,15 +62,28 @@
     }
   }
 function postToPage (total) {
-    var $scoreListItem = $("<li>")
-    var $scoreList = $("#scores")
+    // objects
+    var $scoreTable = $("tr");
+    var $scoreTableItem = $("<td>")
+    var $scoreTableItemDiv = $("<div>").attr("class", "breakdown");
+    // text
+    var $scoreBreakdown = $("<p>")
+    var $scoreDifference = $("<p>")
+    var $scoreTotal = $("<p>").attr("class", "total");
+    // input values
+    var $scoreField = parseInt($("#score").val());
+    var $wagerField = parseInt($("#wager").val());
 
-    $scoreListItem.text(total);
-    $scoreListItem.appendTo($scoreList);
+    $scoreBreakdown.text($scoreField + "/" + $wagerField).appendTo($scoreTableItemDiv);
+    $scoreTableItemDiv.appendTo($scoreTableItem);
+    $scoreTableItem.appendTo($scoreTable);
+    $scoreTotal.text(total).appendTo($scoreTableItem);
+
+
     if (parseInt(total) >= 10) {
-      $scoreListItem.attr("class", "winningHand");
+      $scoreTableItem.attr("class", "winningHand");
     } else if (parseInt(total) <10) {
-      $scoreListItem.attr("class", "losingHand");
+      $scoreTableItem.attr("class", "losingHand");
     }
 }
 
