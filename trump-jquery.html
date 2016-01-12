@@ -2,13 +2,19 @@
 <style media="screen">
   body {
     font-family: 'Open Sans', sans-serif;
+    background-color: black;
+    color: white;
   }
   .breakdown {
-    text-decoration: none;
-    list-style-type: none;
-    font-size: .5em;
+    font-size: 1em;
     color: grey;
-    display: inline;
+    float: left;
+    font-weight: 400;
+  }
+  .difference {
+    font-size: 1em;
+    color: grey;
+    font-weight: 800;
     float: left;
   }
   .total {
@@ -67,14 +73,16 @@ function postToPage (total) {
     var $scoreTableItem = $("<td>")
     var $scoreTableItemDiv = $("<div>").attr("class", "breakdown");
     // text
-    var $scoreBreakdown = $("<p>")
-    var $scoreDifference = $("<p>")
+    var $scoreBreakdown = $("<span>")
+    var $scoreDifference = $("<span>").attr("class", "difference")
     var $scoreTotal = $("<p>").attr("class", "total");
+    var $brk = $("<br />");
     // input values
     var $scoreField = parseInt($("#score").val());
     var $wagerField = parseInt($("#wager").val());
 
-    $scoreBreakdown.text($scoreField + "/" + $wagerField).appendTo($scoreTableItemDiv);
+    $scoreBreakdown.text($scoreField + "/" + $wagerField).appendTo($scoreTableItemDiv).after("<br />");
+    $scoreDifference.text("+" + total).appendTo($scoreTableItemDiv);
     $scoreTableItemDiv.appendTo($scoreTableItem);
     $scoreTableItem.appendTo($scoreTable);
     $scoreTotal.text(total).appendTo($scoreTableItem);
