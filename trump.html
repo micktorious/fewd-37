@@ -1,0 +1,40 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<ul id="scores">
+
+</ul>
+<form action="index.html">
+  Wager: <input type="text" id="wager">
+  Score: <input type="text" id="score">
+  <button type="submit">Create</button>
+</form>
+
+<script type="text/javascript">
+  var scoreField = document.getElementById("score");
+  var wagerField = document.getElementById("wager");
+  var button = document.querySelector("button");
+  var scoreList = document.getElementById("scores")
+
+  button.addEventListener("click", calcScore);
+
+  function calcScore(wagerField, scoreField) {
+    event.preventDefault();
+    if (wagerField/scoreField == 1) {
+      return (10 + scoreField);
+    } else if (wagerField < scoreField) {
+        return (scoreField - wagerField);
+    } else if (wagerField > scoreField) {
+        return (0);
+    }
+  }
+
+    // var scoreListItem = document.createElement("li")
+    // scoreListItem.setAttribute("class", "newScore");
+    // scoreListItem.textContent = parseInt(scoreField.value)
+
+
+
+    // scoreList.appendChild(scoreListItem);
+
+
+</script>
