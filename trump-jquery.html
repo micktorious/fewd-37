@@ -96,22 +96,21 @@
       .losingHand {
         color: rgba(204, 0, 0, 1);;
       }
-      #nameField {
-        width: 200px;
-      }
+
     </style>
   </head>
   <body>
     <div id="namePrompts">
 
     </div>
+
     <div>
       <ol id="nameList">
       </ol>
     </div>
 
 
-    <table id="scores">
+    <table id="scoresPrompts">
       <tbody>
         <tr>
 
@@ -130,43 +129,54 @@
       }]
       var $body = $("body");
       var $nameList = $("#nameList");
+      var $namePrompts = $("#namePrompts");
+      var $scoresPrompts = $("#scoresPrompts");
 
+      // name prompts
+      var $nameForm = $("<form>").attr("id", "nameForm").appendTo($namePrompts)
+      var $nameField = $("<input>").attr("id", "nameField").attr("placeholder", "Enter Player Name").attr("class", "on").css("width", "192px").appendTo($nameForm);
+      var $submitName = $("<button>").attr("id", "submitNameButton").attr("type", "submit").text("Add").appendTo($nameForm);
+      var $startGameButton = $("<button>").text("Start Game").attr("id", "startGameButton").appendTo($nameForm)
 
-      function showNamePrompts () {
-        var $namePrompts = $("#namePrompts");
-        var $nameForm = $("<form>").appendTo($namePrompts)
-        var $nameField = $("<input>").attr("id", "nameField").attr("placeholder", "Enter Player Name").appendTo($nameForm);
-        var $submitName = $("<button>").attr("id", "submitNameButton").attr("type", "submit").text("Add").appendTo($nameForm);
-        $nameForm.on("submit", showScorePrompts);
-      }
+      // score prompts
+      var $scoreForm = $("<form>").attr("id", "scoreForm").appendTo($scoresPrompts).attr("action", "index.html");
+      var $wagerField = $("<input>").attr("type", "text").attr("placeholder", "Wager").attr("id", "wager").appendTo($scoreForm).attr("class", "on");
+      var $scoreField = $("<input>").attr("type", "text").attr("placeholder", "Score").attr("id", "score").appendTo($scoreForm).attr("class", "on");
+      var $button = $("<button>").attr("type", "submit").attr("id", "submitScore").text("Create").appendTo($scoreForm);
 
-      showNamePrompts()
-
+      // event listeners
       $("#submitNameButton").on("click", addNameToList);
       $("#submitScore").on("click", calcScore);
+      $("#nameForm").on("submit", showScorePrompts);
+      $("#startGameButton").on("submit", showScorePrompts);
+
+      // functions
+      $scoreForm.hide()
+      $startGameButton.hide()
 
       function addNameToList(event) {
         event.preventDefault();
-        var $theName = $("#nameField").val()
+        var theName = $("#nameField").val()
         var $nameForm = $("form")
         $players.push({
-            name: $theName
+            name: theName
         })
         var $currentItem = $players.length - 1;
         var $newNameOnList = $("<li>").text($players[$currentItem].name).appendTo($nameList)
         $("#nameField").trigger("reset");
         if ($players.length == 2) {
-          var $startGameButton = $("<button>").text("Start Game").attr("id", "startGameButton").appendTo($nameForm)
+          $startGameButton.show();
         }
+        $nameForm.reset();
       }
-
 
       function showScorePrompts(event) {
         event.preventDefault();
-        var $form = $("<form>").appendTo($body).attr("action", "index.html");
-        var $wagerField = $("<input>").attr("type", "text").attr("placeholder", "Wager").attr("id", "wager").appendTo($form).attr("class", "on");
-        var $scoreField = $("<input>").attr("type", "text").attr("placeholder", "Score").attr("id", "score").appendTo($form).attr("class", "on");
-        var $button = $("<button>").attr("type", "submit").attr("id", "submitScore").text("Create").appendTo($form);
+        $nameList.hide()
+        $namePrompts.hide()
+        $scoreForm.show()
+        $("#startGameButton").hide()
+
       }
 
       function calcScore(event) {
@@ -183,6 +193,8 @@
         } else {
           console.log("something went wrong");
         }
+        $scoreField.reset();
+        $wagerField.reset();
       }
     function postToPage (total) {
         // objects
@@ -210,6 +222,8 @@
         } else if (parseInt(total) <10) {
           $scoreTableItem.attr("class", "losingHand");
         }
+        $scoreField.reset();
+        $wagerField.reset();
     }
     </script>
   </body>
