@@ -11,13 +11,21 @@
         background-color: black;
         color: white;
       }
+      .subtext {
+        font-size: .75em;
+        color: grey;
+      }
       .on {
         visibility: visible;
       }
       .off {
         visibility: hidden;
       }
-      form input {
+      td {
+        background-color: green;
+        width: 100px;
+      }
+      input {
         font-size: 1em;
         width: 75px;
         height: 30px;
@@ -96,7 +104,9 @@
       .losingHand {
         color: rgba(204, 0, 0, 1);;
       }
-
+      #gameSizeBox {
+        width: 192px;
+      }
     </style>
   </head>
   <body>
@@ -109,12 +119,11 @@
       </ol>
     </div>
 
+    <div id="gameSizePrompt">
+    </div>
 
     <table id="scoresPrompts">
       <tbody>
-        <tr>
-
-        </tr>
       </tbody>
     </table>
 
@@ -122,11 +131,14 @@
     <script type="text/javascript">
       var $players = [];
       var $hand = [{
+            hands: 0,
             cards: [],
             wagers: [],
             scores: [],
             totals: []
       }]
+
+      // global var's
       var $body = $("body");
       var $nameList = $("#nameList");
       var $namePrompts = $("#namePrompts");
@@ -136,7 +148,14 @@
       var $nameForm = $("<form>").attr("id", "nameForm").appendTo($namePrompts)
       var $nameField = $("<input>").attr("id", "nameField").attr("placeholder", "Enter Player Name").attr("class", "on").css("width", "192px").appendTo($nameForm);
       var $submitName = $("<button>").attr("id", "submitNameButton").attr("type", "submit").text("Add").appendTo($nameForm);
-      var $startGameButton = $("<button>").text("Start Game").attr("id", "startGameButton").appendTo($nameForm)
+      var  $enterHandsButton = $("<button>").text("Next").attr("id", "enterHandsButton").appendTo($nameForm)
+
+      // game size prompts
+      var $gameSizePrompt = $("#gameSizePrompt");
+      var $sizeQuestion = $("<p>").text("How many hands would you like to play?").appendTo($gameSizePrompt)
+      var $sizeTip = $("<p>").attr("class", "subtext").text("(Enter 16 for regular game)").appendTo($gameSizePrompt)
+      var $gameSizeBox = $("<input>").attr("type", "text").attr("class", "on").attr("placeholder", "Enter # of Hands").attr("id", "gameSizeBox").appendTo($gameSizePrompt);
+      var $startGameButton = $("<button>").text("Start Game").attr("id", "startGameButton").appendTo($gameSizePrompt)
 
       // score prompts
       var $scoreForm = $("<form>").attr("id", "scoreForm").appendTo($scoresPrompts).attr("action", "index.html");
@@ -147,12 +166,18 @@
       // event listeners
       $("#submitNameButton").on("click", addNameToList);
       $("#submitScore").on("click", calcScore);
-      $("#nameForm").on("submit", showScorePrompts);
-      $("#startGameButton").on("submit", showScorePrompts);
+      $nameForm.on("submit", showScorePrompts);
+      $enterHandsButton.on("click", showGameSizePrompt);
+      $("#startGameButton").on("click", addHandsObject);
 
-      // functions
+      // game spreadsheet
+      var $tableOfHands = $("tbody");
+
+      // initial function hiding
       $scoreForm.hide()
-      $startGameButton.hide()
+      $enterHandsButton.hide()
+      $gameSizePrompt.hide()
+
 
       function addNameToList(event) {
         event.preventDefault();
@@ -165,18 +190,97 @@
         var $newNameOnList = $("<li>").text($players[$currentItem].name).appendTo($nameList)
         $("#nameField").trigger("reset");
         if ($players.length == 2) {
-          $startGameButton.show();
+           $enterHandsButton.show();
         }
-        $nameForm.reset();
       }
 
-      function showScorePrompts(event) {
-        event.preventDefault();
-        $nameList.hide()
-        $namePrompts.hide()
-        $scoreForm.show()
-        $("#startGameButton").hide()
+      function showScorePrompts() {
+        $nameList.hide();
+        $namePrompts.hide();
+        $scoreForm.show();
+        $startGameButton.hide();
+        $gameSizePrompt.hide();
+        showNames();
+      }
+      function showGamePlayers () {
 
+      }
+      function showGameSizePrompt (event) {
+        event.preventDefault();
+        $namePrompts.hide();
+        $nameList.hide();
+        $gameSizePrompt.show();
+      }
+      function addHandsObject (event) {
+        var totalHands = parseInt($("#gameSizeBox").val());
+        $hand[0].hands = 0;
+        $hand[0].hands = totalHands;
+        createCardsArray();
+      }
+      function createCardsArray () {
+        if ($hand[0].hands == 1) {
+          $hand[0].cards = [1];
+          showScorePrompts();
+        } else if ($hand[0].hands == 2) {
+          $hand[0].cards = [1,1];
+          showScorePrompts();
+        } else if ($hand[0].hands == 3) {
+            $hand[0].cards = [2,1,2];
+            showScorePrompts();
+        } else if ($hand[0].hands == 4) {
+            $hand[0].cards = [2,1,1,2];
+            showScorePrompts();
+        } else if ($hand[0].hands == 5) {
+            $hand[0].cards = [3,2,1,2,3];
+            showScorePrompts();
+        } else if ($hand[0].hands == 6) {
+            $hand[0].cards = [3,2,1,1,2,3];
+            showScorePrompts();
+        } else if ($hand[0].hands == 7) {
+            $hand[0].cards = [4,3,2,1,2,3,4];
+            showScorePrompts();
+        } else if ($hand[0].hands == 8) {
+            $hand[0].cards = [4,3,2,1,1,2,3,4];
+            showScorePrompts();
+        } else if ($hand[0].hands == 9) {
+            $hand[0].cards = [5,4,3,2,1,2,3,4,5];
+            showScorePrompts();
+        } else if ($hand[0].hands == 10) {
+            $hand[0].cards = [5,4,3,2,1,1,2,3,4,5];
+            showScorePrompts();
+        } else if ($hand[0].hands == 11) {
+            $hand[0].cards = [6,5,4,3,2,1,2,3,4,5,6];
+            showScorePrompts();
+        } else if ($hand[0].hands == 12) {
+            $hand[0].cards = [6,5,4,3,2,1,1,2,3,4,5,6];
+            showScorePrompts();
+        } else if ($hand[0].hands == 13) {
+            $hand[0].cards = [8,6,5,4,3,2,1,2,3,4,5,6,8];
+            showScorePrompts();
+        } else if ($hand[0].hands == 14) {
+            $hand[0].cards = [8,6,5,4,3,2,1,1,2,3,4,5,6,8];
+            showScorePrompts();
+        } else if ($hand[0].hands == 15) {
+            $hand[0].cards = [10,8,6,5,4,3,2,1,2,3,4,5,6,8,10];
+            showScorePrompts();
+        } else if ($hand[0].hands == 16) {
+            $hand[0].cards = [10,8,6,5,4,3,2,1,1,2,3,4,5,6,8,10];
+            showScorePrompts();
+        } else if ($hand[0].hands == 17) {
+            $hand[0].cards = [10,8,7,6,5,4,3,2,1,2,3,4,5,6,7,8,10];
+            showScorePrompts();
+        } else if ($hand[0].hands == 18) {
+            $hand[0].cards = [10,8,7,6,5,4,3,2,1,1,2,3,4,5,6,7,8,10];
+            showScorePrompts();
+        } else if ($hand[0].hands == 20) {
+            $hand[0].cards = [10,9,8,7,6,5,4,3,2,1,2,3,4,5,6,7,8,9,10];
+            showScorePrompts();
+        } else if ($hand[0].hands == 20) {
+            $hand[0].cards = [10,9,8,7,6,5,4,3,2,1,1,2,3,4,5,6,7,8,9,10];
+            showScorePrompts();
+        } else {
+          alert("You must enter only a number from 1 to 20.");
+        }
       }
 
       function calcScore(event) {
@@ -193,8 +297,6 @@
         } else {
           console.log("something went wrong");
         }
-        $scoreField.reset();
-        $wagerField.reset();
       }
     function postToPage (total) {
         // objects
@@ -222,9 +324,30 @@
         } else if (parseInt(total) <10) {
           $scoreTableItem.attr("class", "losingHand");
         }
-        $scoreField.reset();
-        $wagerField.reset();
-    }
+      }
+
+      function showNames () {
+        var $tableOfHands = $("tbody")
+        for (var i = 0; i < $players.length; i++) {
+          var $header = $("<th>").text($players[i].name).attr("id", "nameHeader").appendTo($tableOfHands)
+        }
+        showHands();
+      }
+      function showHands() {
+        var hands = $hand[0].hands;
+        var $tableOfHands = $("tbody")
+        for (var i = 0; i < hands; i++) {
+          $("<tr>").text($hand[0].cards[i]).appendTo($tableOfHands);
+        }
+        for (var i = 0; i < $players.length; i++) {
+          $("<td>").appendTo("tr");
+        }
+        // for (var i = 0; i < $players[i].length -1; i++) {
+        //   var newColumn1 = $("<td>").appendTo("tr").text("it worked");
+
+        // }
+      }
+
     </script>
   </body>
 </html>
