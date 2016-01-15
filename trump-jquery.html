@@ -15,14 +15,25 @@
         font-size: .75em;
         color: grey;
       }
-      .on {
-        visibility: visible;
-      }
-      .off {
-        visibility: hidden;
-      }
       td {
-        background-color: green;
+        width: 100px;
+        margin: 10px;
+        padding: 10px;
+        text-align: center;
+        height: 60px;
+      }
+      th {
+        height: 60px;
+      }
+      th:first-child {
+        color: rgba(102, 102, 102, 1);
+        font-size: .75em;
+        width: 100px;
+      }
+      tr {
+        text-align: center;
+        color: rgba(102, 102, 102, 1);
+        font-size: .75em;
         width: 100px;
       }
       input {
@@ -95,9 +106,6 @@
         font-size: 3em;
         font-weight: 800;
       }
-      table tbody tr div {
-        float: left;
-      }
       .winningHand {
         color: green;
       }
@@ -126,6 +134,11 @@
       <tbody>
       </tbody>
     </table>
+
+    <table id="scoreTemp">
+
+    </table>
+
 
 
     <script type="text/javascript">
@@ -158,9 +171,10 @@
       var $startGameButton = $("<button>").text("Start Game").attr("id", "startGameButton").appendTo($gameSizePrompt)
 
       // score prompts
-      var $scoreForm = $("<form>").attr("id", "scoreForm").appendTo($scoresPrompts).attr("action", "index.html");
-      var $wagerField = $("<input>").attr("type", "text").attr("placeholder", "Wager").attr("id", "wager").appendTo($scoreForm).attr("class", "on");
-      var $scoreField = $("<input>").attr("type", "text").attr("placeholder", "Score").attr("id", "score").appendTo($scoreForm).attr("class", "on");
+      var $scoreTemp = $("scoreTemp")
+      var $scoreForm = $("<form>").attr("id", "scoreForm").appendTo($scoreTemp).attr("action", "index.html");
+      var $wagerField = $("<input>").attr("type", "text").attr("placeholder", "Wager").attr("id", "wager").appendTo($scoreForm)
+      var $scoreField = $("<input>").attr("type", "text").attr("placeholder", "Score").attr("id", "score").appendTo($scoreForm)
       var $button = $("<button>").attr("type", "submit").attr("id", "submitScore").text("Create").appendTo($scoreForm);
 
       // event listeners
@@ -177,6 +191,7 @@
       $scoreForm.hide()
       $enterHandsButton.hide()
       $gameSizePrompt.hide()
+      $scoreTemp.hide()
 
 
       function addNameToList(event) {
@@ -197,7 +212,7 @@
       function showScorePrompts() {
         $nameList.hide();
         $namePrompts.hide();
-        $scoreForm.show();
+        // $scoreForm.show();
         $startGameButton.hide();
         $gameSizePrompt.hide();
         showNames();
@@ -327,9 +342,10 @@
       }
 
       function showNames () {
-        var $tableOfHands = $("tbody")
+        var $tableOfHands = $("tbody");
+        var handsHeader = $("<th>").text("HANDS").appendTo($tableOfHands);
         for (var i = 0; i < $players.length; i++) {
-          var $header = $("<th>").text($players[i].name).attr("id", "nameHeader").appendTo($tableOfHands)
+          var $header = $("<th>").text($players[i].name).attr("id", "nameHeader").appendTo($tableOfHands);
         }
         showHands();
       }
@@ -342,10 +358,8 @@
         for (var i = 0; i < $players.length; i++) {
           $("<td>").appendTo("tr");
         }
-        // for (var i = 0; i < $players[i].length -1; i++) {
-        //   var newColumn1 = $("<td>").appendTo("tr").text("it worked");
+        $("tr:even").css("background-color", "#181818");
 
-        // }
       }
 
     </script>
