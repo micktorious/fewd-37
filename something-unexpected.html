@@ -1,4 +1,15 @@
+<button id="login">Login to see your events</button>
+
+<ul id="events">
+
+</ul>
+
 <script>
+
+  document.querySelector("button").addEventListener("click", function(event) {
+    event.preventDefault();
+    alert("yo yo!")
+  })
   window.fbAsyncInit = function() {
     FB.init({
       appId      : '1504217799882787',

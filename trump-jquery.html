@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>TRUMP</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,800,700,300' rel='stylesheet' type='text/css'>
+    <style media="screen">
+      body {
+        font-family: 'Open Sans', sans-serif;
+        background-color: black;
+        color: white;
+      }
+      .subtext {
+        font-size: .75em;
+        color: grey;
+      }
+      td {
+        width: 100px;
+        margin: 10px;
+        padding: 10px;
+        text-align: center;
+        height: 60px;
+      }
+      th {
+        height: 60px;
+      }
+      th:first-child {
+        color: rgba(102, 102, 102, 1);
+        font-size: .75em;
+        width: 100px;
+      }
+      tr {
+        text-align: center;
+        color: rgba(102, 102, 102, 1);
+        font-size: .75em;
+        width: 100px;
+      }
+      input {
+        font-size: 1em;
+        width: 75px;
+        height: 30px;
+        border-top-style: none;
+        border-right-style: none;
+        border-left-style: none;
+        background-color: rgba(240, 240, 240, 0.10);
+        padding: 10px;
+        margin-right: 20px;
+        border-radius: 4px;
+        text-align: center;
+        color: white;
+      }
+      button {
+        font-size: 1em;
+        padding: 15px;
+        margin-right: 20px;
+        border-radius: 4px;
+        border-right-style: none;
+        border-left-style: none;
+        border-bottom-style: none;
+        border-top-style: none;
+        text-align: center;
+        background-color: #009efa;
+        color: white;
+      }
+      :placeholder-shown {
+        color: rgba(255, 255, 255, 0.2);
+      }
+      ::-webkit-input-placeholder { /* Safari, Chrome and Opera */
+        color: rgba(255, 255, 255, 0.2);
+      }
+
+      :-moz-placeholder { /* Firefox 18- */
+        color: rgba(255, 255, 255, 0.2);
+      }
+
+      ::-moz-placeholder { /* Firefox 19+ */
+        color: rgba(255, 255, 255, 0.2);
+      }
+
+      :-ms-input-placeholder { /* IE 10+ */
+        color: rgba(255, 255, 255, 0.2);
+      }
+
+      ::-ms-input-placeholder { /* Edge */
+        color: rgba(255, 255, 255, 0.2);
+      }
+
+      :placeholder-shown { /* Standard one last! */
+        color: rgba(255, 255, 255, 0.2);
+      }
+      .breakdown {
+        font-size: 1em;
+        color: grey;
+        float: left;
+        font-weight: 400;
+      }
+      .difference {
+        font-size: 1em;
+        color: grey;
+        font-weight: 800;
+      }
+      .total {
+        text-decoration: none;
+        list-style-type: none;
+        font-size: 3em;
+        font-weight: 800;
+      }
+      .winningHand {
+        color: green;
+      }
+      .losingHand {
+        color: rgba(204, 0, 0, 1);;
+      }
+      #gameSizeBox {
+        width: 192px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="namePrompts">
+
+    </div>
+
+    <div>
+      <ol id="nameList">
+      </ol>
+    </div>
+
+    <div id="gameSizePrompt">
+    </div>
+
+    <table id="scoresPrompts">
+      <tbody>
+      </tbody>
+    </table>
+
+    <table id="scoreTemp">
+
+    </table>
+
+
+
+    <script type="text/javascript">
+      var $players = [];
+      var $hand = [{
+            hands: 0,
+            cards: [],
+            wagers: [],
+            scores: [],
+            totals: []
+      }]
+
+      // global var's
+      var $body = $("body");
+      var $nameList = $("#nameList");
+      var $namePrompts = $("#namePrompts");
+      var $scoresPrompts = $("#scoresPrompts");
+
+      // name prompts
+      var $nameForm = $("<form>").attr("id", "nameForm").appendTo($namePrompts)
+      var $nameField = $("<input>").attr("id", "nameField").attr("placeholder", "Enter Player Name").attr("class", "on").css("width", "192px").appendTo($nameForm);
+      var $submitName = $("<button>").attr("id", "submitNameButton").attr("type", "submit").text("Add").appendTo($nameForm);
+      var  $enterHandsButton = $("<button>").text("Next").attr("id", "enterHandsButton").appendTo($nameForm)
+
+      // game size prompts
+      var $gameSizePrompt = $("#gameSizePrompt");
+      var $sizeQuestion = $("<p>").text("How many hands would you like to play?").appendTo($gameSizePrompt)
+      var $sizeTip = $("<p>").attr("class", "subtext").text("(Enter 16 for regular game)").appendTo($gameSizePrompt)
+      var $gameSizeBox = $("<input>").attr("type", "text").attr("class", "on").attr("placeholder", "Enter # of Hands").attr("id", "gameSizeBox").appendTo($gameSizePrompt);
+      var $startGameButton = $("<button>").text("Start Game").attr("id", "startGameButton").appendTo($gameSizePrompt)
+
+      // score prompts
+      var $scoreTemp = $("scoreTemp")
+      var $scoreForm = $("<form>").attr("id", "scoreForm").appendTo($scoreTemp).attr("action", "index.html");
+      var $wagerField = $("<input>").attr("type", "text").attr("placeholder", "Wager").attr("id", "wager").appendTo($scoreForm)
+      var $scoreField = $("<input>").attr("type", "text").attr("placeholder", "Score").attr("id", "score").appendTo($scoreForm)
+      var $button = $("<button>").attr("type", "submit").attr("id", "submitScore").text("Create").appendTo($scoreForm);
+
+      // event listeners
+      $("#submitNameButton").on("click", addNameToList);
+      $("#submitScore").on("click", calcScore);
+      $nameForm.on("submit", showScorePrompts);
+      $enterHandsButton.on("click", showGameSizePrompt);
+      $("#startGameButton").on("click", addHandsObject);
+
+      // game spreadsheet
+      var $tableOfHands = $("tbody");
+
+      // initial function hiding
+      $scoreForm.hide()
+      $enterHandsButton.hide()
+      $gameSizePrompt.hide()
+      $scoreTemp.hide()
+
+
+      function addNameToList(event) {
+        event.preventDefault();
+        var theName = $("#nameField").val()
+        var $nameForm = $("form")
+        $players.push({
+            name: theName
+        })
+        var $currentItem = $players.length - 1;
+        var $newNameOnList = $("<li>").text($players[$currentItem].name).appendTo($nameList)
+        $("#nameField").trigger("reset");
+        if ($players.length == 2) {
+           $enterHandsButton.show();
+        }
+      }
+
+      function showScorePrompts() {
+        $nameList.hide();
+        $namePrompts.hide();
+        // $scoreForm.show();
+        $startGameButton.hide();
+        $gameSizePrompt.hide();
+        showNames();
+      }
+      function showGamePlayers () {
+
+      }
+      function showGameSizePrompt (event) {
+        event.preventDefault();
+        $namePrompts.hide();
+        $nameList.hide();
+        $gameSizePrompt.show();
+      }
+      function addHandsObject (event) {
+        var totalHands = parseInt($("#gameSizeBox").val());
+        $hand[0].hands = 0;
+        $hand[0].hands = totalHands;
+        createCardsArray();
+      }
+      function createCardsArray () {
+        if ($hand[0].hands == 1) {
+          $hand[0].cards = [1];
+          showScorePrompts();
+        } else if ($hand[0].hands == 2) {
+          $hand[0].cards = [1,1];
+          showScorePrompts();
+        } else if ($hand[0].hands == 3) {
+            $hand[0].cards = [2,1,2];
+            showScorePrompts();
+        } else if ($hand[0].hands == 4) {
+            $hand[0].cards = [2,1,1,2];
+            showScorePrompts();
+        } else if ($hand[0].hands == 5) {
+            $hand[0].cards = [3,2,1,2,3];
+            showScorePrompts();
+        } else if ($hand[0].hands == 6) {
+            $hand[0].cards = [3,2,1,1,2,3];
+            showScorePrompts();
+        } else if ($hand[0].hands == 7) {
+            $hand[0].cards = [4,3,2,1,2,3,4];
+            showScorePrompts();
+        } else if ($hand[0].hands == 8) {
+            $hand[0].cards = [4,3,2,1,1,2,3,4];
+            showScorePrompts();
+        } else if ($hand[0].hands == 9) {
+            $hand[0].cards = [5,4,3,2,1,2,3,4,5];
+            showScorePrompts();
+        } else if ($hand[0].hands == 10) {
+            $hand[0].cards = [5,4,3,2,1,1,2,3,4,5];
+            showScorePrompts();
+        } else if ($hand[0].hands == 11) {
+            $hand[0].cards = [6,5,4,3,2,1,2,3,4,5,6];
+            showScorePrompts();
+        } else if ($hand[0].hands == 12) {
+            $hand[0].cards = [6,5,4,3,2,1,1,2,3,4,5,6];
+            showScorePrompts();
+        } else if ($hand[0].hands == 13) {
+            $hand[0].cards = [8,6,5,4,3,2,1,2,3,4,5,6,8];
+            showScorePrompts();
+        } else if ($hand[0].hands == 14) {
+            $hand[0].cards = [8,6,5,4,3,2,1,1,2,3,4,5,6,8];
+            showScorePrompts();
+        } else if ($hand[0].hands == 15) {
+            $hand[0].cards = [10,8,6,5,4,3,2,1,2,3,4,5,6,8,10];
+            showScorePrompts();
+        } else if ($hand[0].hands == 16) {
+            $hand[0].cards = [10,8,6,5,4,3,2,1,1,2,3,4,5,6,8,10];
+            showScorePrompts();
+        } else if ($hand[0].hands == 17) {
+            $hand[0].cards = [10,8,7,6,5,4,3,2,1,2,3,4,5,6,7,8,10];
+            showScorePrompts();
+        } else if ($hand[0].hands == 18) {
+            $hand[0].cards = [10,8,7,6,5,4,3,2,1,1,2,3,4,5,6,7,8,10];
+            showScorePrompts();
+        } else if ($hand[0].hands == 20) {
+            $hand[0].cards = [10,9,8,7,6,5,4,3,2,1,2,3,4,5,6,7,8,9,10];
+            showScorePrompts();
+        } else if ($hand[0].hands == 20) {
+            $hand[0].cards = [10,9,8,7,6,5,4,3,2,1,1,2,3,4,5,6,7,8,9,10];
+            showScorePrompts();
+        } else {
+          alert("You must enter only a number from 1 to 20.");
+        }
+      }
+
+      function calcScore(event) {
+        event.preventDefault();
+        var $scoreField = parseInt($("#score").val());
+        var $wagerField = parseInt($("#wager").val());
+
+        if ($wagerField == $scoreField) {
+          postToPage(10 + $scoreField);
+        } else if ($wagerField < $scoreField) {
+            postToPage($scoreField - $wagerField);
+        } else if ($wagerField > $scoreField) {
+            postToPage(0);
+        } else {
+          console.log("something went wrong");
+        }
+      }
+    function postToPage (total) {
+        // objects
+        var $scoreTable = $("tr");
+        var $scoreTableItem = $("<td>")
+        var $scoreTableItemDiv = $("<div>").attr("class", "breakdown");
+        // text
+        var $scoreBreakdown = $("<span>")
+        var $scoreDifference = $("<span>").attr("class", "difference")
+        var $scoreTotal = $("<p>").attr("class", "total");
+        var $brk = $("<br />");
+        // input values
+        var $scoreField = parseInt($("#score").val());
+        var $wagerField = parseInt($("#wager").val());
+        var $lastTd = $("td").last()
+        $scoreBreakdown.text($scoreField + "/" + $wagerField).appendTo($scoreTableItemDiv).after("<br />");
+        $scoreDifference.text("+" + total).appendTo($scoreTableItemDiv);
+        $scoreTableItemDiv.appendTo($scoreTableItem);
+        $scoreTableItem.appendTo($scoreTable);
+        $scoreTotal.text(total).appendTo($scoreTableItem);
+
+
+        if (parseInt(total) >= 10) {
+          $scoreTableItem.attr("class", "winningHand");
+        } else if (parseInt(total) <10) {
+          $scoreTableItem.attr("class", "losingHand");
+        }
+      }
+
+      function showNames () {
+        var $tableOfHands = $("tbody");
+        var handsHeader = $("<th>").text("HANDS").appendTo($tableOfHands);
+        for (var i = 0; i < $players.length; i++) {
+          var $header = $("<th>").text($players[i].name).attr("id", "nameHeader").appendTo($tableOfHands);
+        }
+        showHands();
+      }
+      function showHands() {
+        var hands = $hand[0].hands;
+        var $tableOfHands = $("tbody")
+        for (var i = 0; i < hands; i++) {
+          $("<tr>").text($hand[0].cards[i]).appendTo($tableOfHands);
+        }
+        for (var i = 0; i < $players.length; i++) {
+          $("<td>").appendTo("tr");
+        }
+        $("tr:even").css("background-color", "#181818");
+
+      }
+
+    </script>
+  </body>
+</html>
