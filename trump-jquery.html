@@ -24,6 +24,7 @@
       }
       th {
         height: 60px;
+        vertical-align: middle;
       }
       th:first-child {
         color: rgba(102, 102, 102, 1);
@@ -35,6 +36,7 @@
         color: rgba(102, 102, 102, 1);
         font-size: .75em;
         width: 100px;
+        vertical-align:middle;
       }
       input {
         font-size: 1em;
@@ -135,9 +137,9 @@
       </tbody>
     </table>
 
-    <table id="scoreTemp">
+    <div id="scoreTemp">
 
-    </table>
+    </div>
 
 
 
@@ -149,7 +151,7 @@
             wagers: [],
             scores: [],
             totals: []
-      }]
+      }];
 
       // global var's
       var $body = $("body");
@@ -171,7 +173,7 @@
       var $startGameButton = $("<button>").text("Start Game").attr("id", "startGameButton").appendTo($gameSizePrompt)
 
       // score prompts
-      var $scoreTemp = $("scoreTemp")
+      var $scoreTemp = $("#scoreTemp")
       var $scoreForm = $("<form>").attr("id", "scoreForm").appendTo($scoreTemp).attr("action", "index.html");
       var $wagerField = $("<input>").attr("type", "text").attr("placeholder", "Wager").attr("id", "wager").appendTo($scoreForm)
       var $scoreField = $("<input>").attr("type", "text").attr("placeholder", "Score").attr("id", "score").appendTo($scoreForm)
@@ -191,7 +193,7 @@
       $scoreForm.hide()
       $enterHandsButton.hide()
       $gameSizePrompt.hide()
-      $scoreTemp.hide()
+      $scoreTemp.hide();
 
 
       function addNameToList(event) {
@@ -203,7 +205,7 @@
         })
         var $currentItem = $players.length - 1;
         var $newNameOnList = $("<li>").text($players[$currentItem].name).appendTo($nameList)
-        $("#nameField").trigger("reset");
+        $("#nameField").val("")[0].focus();
         if ($players.length == 2) {
            $enterHandsButton.show();
         }
@@ -212,13 +214,11 @@
       function showScorePrompts() {
         $nameList.hide();
         $namePrompts.hide();
-        // $scoreForm.show();
+        $scoreForm.show();
         $startGameButton.hide();
         $gameSizePrompt.hide();
         showNames();
-      }
-      function showGamePlayers () {
-
+        // $scoreTemp.show().appendTo("td")
       }
       function showGameSizePrompt (event) {
         event.preventDefault();
@@ -298,6 +298,17 @@
         }
       }
 
+      function showScoreForm () {
+        $scoreForm.show()
+      }
+      function showWagerPrompt () {
+        $scoreTemp.show()
+        $scoreForm.appendTo("td")
+        var theFirstRow = $("tr")[0]
+        for (var i = 0; i < $players.length-1; i++) {
+          var test = $("td")[i]
+        }
+      }
       function calcScore(event) {
         event.preventDefault();
         var $scoreField = parseInt($("#score").val());
@@ -313,33 +324,31 @@
           console.log("something went wrong");
         }
       }
-    function postToPage (total) {
-        // objects
-        var $scoreTable = $("tr");
-        var $scoreTableItem = $("<td>")
-        var $scoreTableItemDiv = $("<div>").attr("class", "breakdown");
-        // text
-        var $scoreBreakdown = $("<span>")
-        var $scoreDifference = $("<span>").attr("class", "difference")
-        var $scoreTotal = $("<p>").attr("class", "total");
-        var $brk = $("<br />");
-        // input values
-        var $scoreField = parseInt($("#score").val());
-        var $wagerField = parseInt($("#wager").val());
-        var $lastTd = $("td").last()
-        $scoreBreakdown.text($scoreField + "/" + $wagerField).appendTo($scoreTableItemDiv).after("<br />");
-        $scoreDifference.text("+" + total).appendTo($scoreTableItemDiv);
-        $scoreTableItemDiv.appendTo($scoreTableItem);
-        $scoreTableItem.appendTo($scoreTable);
-        $scoreTotal.text(total).appendTo($scoreTableItem);
-
-
-        if (parseInt(total) >= 10) {
-          $scoreTableItem.attr("class", "winningHand");
-        } else if (parseInt(total) <10) {
-          $scoreTableItem.attr("class", "losingHand");
-        }
-      }
+    // function postToPage (total) {
+    //     // remove score prompts
+    //     $scoreTemp.hide()
+    //     // objects
+    //     var $scoreTableItemDiv = $("<div>").attr("class", "breakdown");
+    //     // text
+    //     var $scoreBreakdown = $("<span>")
+    //     var $scoreDifference = $("<span>").attr("class", "difference")
+    //     var $brk = $("<br />");
+    //     // input values
+    //     var $scoreField = parseInt($("#score").val());
+    //     var $wagerField = parseInt($("#wager").val());
+    //     var $lastTd = $("td").last()
+    //     $scoreBreakdown.text($scoreField + "/" + $wagerField).appendTo($scoreTableItemDiv).after("<br />");
+    //     $scoreDifference.text("+" + total).appendTo($scoreTableItemDiv);
+    //     $scoreTableItemDiv.appendTo("td");
+    //     var $scoreTotal = $("<p>").attr("class", "total").text(total).appendTo($scoreTableItemDiv);
+    //
+    //
+    //     if (parseInt(total) >= 10) {
+    //       $scoreTotal.attr("class", "winningHand");
+    //     } else if (parseInt(total) <10) {
+    //       $scoreTotal.attr("class", "losingHand");
+    //     }
+    //   }
 
       function showNames () {
         var $tableOfHands = $("tbody");
@@ -353,10 +362,14 @@
         var hands = $hand[0].hands;
         var $tableOfHands = $("tbody")
         for (var i = 0; i < hands; i++) {
-          $("<tr>").text($hand[0].cards[i]).appendTo($tableOfHands);
+          var $row = $("<tr>")
+          $row.appendTo($tableOfHands)
+          var $handsCell = $("<td>").text($hand[0].cards[i]).appendTo($row)
+          // $row.text($hand[0].cards[i]).appendTo($tableOfHands);
         }
         for (var i = 0; i < $players.length; i++) {
-          $("<td>").appendTo("tr");
+          var $player = $("<td>");
+          $player.appendTo("tr");
         }
         $("tr:even").css("background-color", "#181818");
 
