@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Trump Game Board</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,800,700,300' rel='stylesheet' type='text/css'>
+  <style media="screen">
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background-color: black;
+      color: white;
+    }
+    .subtext {
+      font-size: .75em;
+      color: grey;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+
+  </head>
+  <body>
+    <script type="text/javascript">
+      var $game = {
+        players: [],
+        total_hands: 0,
+        current_hand: 0,
+        cards_per_hand: [],
+        hands: [{
+          wagers: [],
+          scores: []
+        }],
+        totals: []
+      };
+
+      // global var's
+      var playerTotal = $game.players.length;
+      var totalHands = $game.total_hands;
+      var currentHand = $game.current_hand;
+
+      // name prompts
+      var $namePrompts = $("<div>").appendTo("body");
+      var $nameForm = $("<form>").appendTo($namePrompts)
+      var $nameField = $("<input>").attr("placeholder", "Enter Player Names").attr("id", "nameField").appendTo($nameForm);
+      var $submitNameButton = $("<button>").attr("id", "submitName").attr("type", "submit").text("Add").appendTo($nameForm);
+      var $finalNameList = $("<button>").attr("type", "submit").text("Submit").appendTo($namePrompts);
+      var $nameList = $("<ul>").appendTo($namePrompts);
+
+      // game size prompts
+      var $gameSizePrompts = $("<div>").appendTo("body");
+      var $sizeQuestion = $("<p>").text("How many hands would you like to play?").appendTo($gameSizePrompts);
+      var $sizeTip = $("<p>").attr("class", "subtext").text("(Enter 16 for regular game)").appendTo($gameSizePrompts);
+      var $gameSizeForm = $("<form>").appendTo($gameSizePrompts);
+      var $gameSizeField = $("<input>").attr("placeholder", "Enter Game size").attr("id", "gameSizeField").appendTo($gameSizeForm);
+      var $submitGameSize = $("<button>").attr("type", "submit").text("Start Game").attr("id", "submitGameSize").appendTo($gameSizeForm);
+
+      // initial hiding
+      $finalNameList.hide();
+      $gameSizePrompts.hide();
+
+      // event listeners
+      $nameForm.on("submit", addName);
+      $finalNameList.on("click", submitNameList);
+      $gameSizeForm.on("submit", createGameBoard);
+
+      function addName (event) {
+        event.preventDefault();
+        var nameField = $("#nameField")
+        var name = $("#nameField").val();
+        if (nameField.val().length <= 1) {
+          alert("You must enter a name.")
+        } else {
+          $game.players.push(name);
+          var newName = $("<li>").text(name).appendTo($nameList);
+        }
+
+        if ($game.players.length >= 2) {
+          $finalNameList.show();
+        }
+        nameField.val("")[0].focus();
+      }
+      function submitNameList (event) {
+        event.preventDefault();
+        $namePrompts.hide();
+        $gameSizePrompts.show();
+      }
+
+      function createGameBoard (event) {
+        event.preventDefault();
+        var gameSize = $("#gameSizeField").val();
+        if (gameSize == "") {
+          alert("You must enter a number between 1 and 20");
+        } else if (gameSize == 0){
+            alert("You must enter a number between 1 and 20");
+        } else if (gameSize >= 21) {
+            alert("You must enter a number between 1 and 20");
+        } else {
+          $game.total_hands = gameSize;
+        }
+      }
+
+
+    </script>
+
+  </body>
+</html>
