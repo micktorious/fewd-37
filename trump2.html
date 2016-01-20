@@ -11,6 +11,58 @@
       background-color: black;
       color: white;
     }
+    td {
+      width: 100px;
+      margin: 10px;
+      padding: 10px;
+      text-align: center;
+      height: 60px;
+    }
+    .handCardCount {
+      color: rgba(102, 102, 102, 1);
+    }
+    th {
+      height: 60px;
+      vertical-align: middle;
+    }
+    th:first-child {
+      color: rgba(102, 102, 102, 1);
+      font-size: .75em;
+      width: 100px;
+    }
+    input {
+      font-size: 1em;
+      width: 75px;
+      height: 30px;
+      border-top-style: none;
+      border-right-style: none;
+      border-left-style: none;
+      background-color: rgba(240, 240, 240, 0.10);
+      padding: 10px;
+      margin-right: 20px;
+      border-radius: 4px;
+      text-align: center;
+      color: white;
+    }
+    button {
+      font-size: 1em;
+      padding: 15px;
+      margin-right: 20px;
+      border-radius: 4px;
+      border-right-style: none;
+      border-left-style: none;
+      border-bottom-style: none;
+      border-top-style: none;
+      text-align: center;
+      background-color: #009efa;
+      color: white;
+    }
+    .winningHand {
+      color: green;
+    }
+    .losingHand {
+      color: rgba(204, 0, 0, 1);;
+    }
     .subtext {
       font-size: .75em;
       color: grey;
@@ -18,6 +70,7 @@
     .hidden {
       display: none;
     }
+
   </style>
 
   </head>
@@ -43,7 +96,7 @@
       // name prompts
       var $namePrompts = $("<div>").appendTo("body");
       var $nameForm = $("<form>").appendTo($namePrompts)
-      var $nameField = $("<input>").attr("placeholder", "Enter Player Names").attr("id", "nameField").appendTo($nameForm);
+      var $nameField = $("<input>").attr("placeholder", "Enter Player Names").css("width", "192px").attr("id", "nameField").appendTo($nameForm);
       var $submitNameButton = $("<button>").attr("id", "submitName").attr("type", "submit").text("Add").appendTo($nameForm);
       var $finalNameList = $("<button>").attr("type", "submit").text("Submit").appendTo($namePrompts);
       var $nameList = $("<ul>").appendTo($namePrompts);
@@ -53,8 +106,13 @@
       var $sizeQuestion = $("<p>").text("How many hands would you like to play?").appendTo($gameSizePrompts);
       var $sizeTip = $("<p>").attr("class", "subtext").text("(Enter 16 for regular game)").appendTo($gameSizePrompts);
       var $gameSizeForm = $("<form>").appendTo($gameSizePrompts);
-      var $gameSizeField = $("<input>").attr("placeholder", "Enter Game size").attr("id", "gameSizeField").appendTo($gameSizeForm);
+      var $gameSizeField = $("<input>").attr("placeholder", "Enter Game Size").css("width", "192px").attr("id", "gameSizeField").appendTo($gameSizeForm);
       var $submitGameSize = $("<button>").attr("type", "submit").text("Start Game").attr("id", "submitGameSize").appendTo($gameSizeForm);
+
+      // gameboard
+      var $gameBoardDiv = $("<div>").attr("id", "gameBoard").appendTo("body");
+      var $gameBoard = $("<tbody>").appendTo($gameBoardDiv);
+
 
       // initial hiding
       $finalNameList.hide();
@@ -69,7 +127,7 @@
         event.preventDefault();
         var nameField = $("#nameField")
         var name = $("#nameField").val();
-        if (nameField.val().length <= 1) {
+        if (nameField.val().length < 1) {
           alert("You must enter a name.")
         } else {
           $game.players.push(name);
@@ -97,7 +155,69 @@
         } else if (gameSize >= 21) {
             alert("You must enter a number between 1 and 20");
         } else {
-          $game.total_hands = gameSize;
+            $game.total_hands = gameSize;
+
+            if ($game.total_hands == 1) {
+              $game.cards_per_hand = [1];
+            } else if ($game.total_hands == 2) {
+                $game.cards_per_hand = [1,1];
+            } else if ($game.total_hands == 3) {
+                $game.cards_per_hand = [2,1,2];
+            } else if ($game.total_hands == 4) {
+                $game.cards_per_hand = [2,1,1,2];
+            } else if ($game.total_hands == 5) {
+                $game.cards_per_hand = [3,2,1,2,3];
+            } else if ($game.total_hands == 6) {
+                $game.cards_per_hand = [3,2,1,1,2,3];
+            } else if ($game.total_hands == 7) {
+                $game.cards_per_hand = [4,3,2,1,2,3,4];
+            } else if ($game.total_hands == 8) {
+                $game.cards_per_hand = [4,3,2,1,1,2,3,4];
+            } else if ($game.total_hands == 9) {
+                $game.cards_per_hand = [5,4,3,2,1,2,3,4,5];
+            } else if ($game.total_hands == 10) {
+                $game.cards_per_hand = [5,4,3,2,1,1,2,3,4,5];
+            } else if ($game.total_hands == 11) {
+                $game.cards_per_hand = [6,5,4,3,2,1,2,3,4,5,6];
+            } else if ($game.total_hands == 12) {
+                $game.cards_per_hand = [6,5,4,3,2,1,1,2,3,4,5,6];
+            } else if ($game.total_hands == 13) {
+                $game.cards_per_hand = [7,6,5,4,3,2,1,2,3,4,5,6,7];
+            } else if ($game.total_hands == 14) {
+                $game.cards_per_hand = [7,6,5,4,3,2,1,1,2,3,4,5,6,7];
+            } else if ($game.total_hands == 15) {
+                $game.cards_per_hand = [8,7,6,5,4,3,2,1,2,3,4,5,6,7,8];
+            } else if ($game.total_hands == 16) {
+                $game.cards_per_hand = [8,7,6,5,4,3,2,1,1,2,3,4,5,6,7,8];
+            } else if ($game.total_hands == 17) {
+                $game.cards_per_hand = [9,8,7,6,5,4,3,2,1,2,3,4,5,6,7,8,9];
+            } else if ($game.total_hands == 18) {
+                $game.cards_per_hand = [9,8,7,6,5,4,3,2,1,1,2,3,4,5,6,7,8,9];
+            } else if ($game.total_hands == 19) {
+                $game.cards_per_hand = [10,9,8,7,6,5,4,3,2,1,2,3,4,5,6,7,8,9,10];
+            } else if ($game.total_hands == 20) {
+                $game.cards_per_hand = [10,9,8,7,6,5,4,3,2,1,1,2,3,4,5,6,7,8,9,10];
+            }
+            $gameSizePrompts.hide();
+          // build gameboard
+          var $gameBoard = $("tbody");
+          // create headers
+          var handsHeader = $("<th>").appendTo($gameBoard);
+          handsHeader.text("CARDS")
+          for (var i = 0; i < $game.players.length; i++) {
+            var $createHeaders = $("<th>").appendTo($gameBoard)
+            $createHeaders.text($game.players[i]);
+          }
+          // create columns
+          for (var i = 0; i < $game.cards_per_hand.length; i++) {
+            var $newRow = $("<tr>").appendTo($gameBoard);
+            var handCardCount = $("<td>").text($game.cards_per_hand[i]).appendTo($newRow).attr("class", "handCardCount");
+          }
+          // create rows
+          for (var i = 0; i < $game.players.length; i++) {
+            var newColumnCell = $("<td>").appendTo("tr");
+          }
+          $("tr:even").css("background-color", "#181818");
         }
       }
 
