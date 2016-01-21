@@ -29,6 +29,7 @@
       color: rgba(102, 102, 102, 1);
       font-size: .75em;
       width: 100px;
+      padding-top: 4px;
     }
     input {
       font-size: 1em;
@@ -39,15 +40,18 @@
       border-left-style: none;
       background-color: rgba(240, 240, 240, 0.10);
       padding: 10px;
-      margin-right: 20px;
+      margin: 20px;
       border-radius: 4px;
       text-align: center;
       color: white;
     }
+    p {
+      margin: 20px;
+    }
     button {
       font-size: 1em;
       padding: 15px;
-      margin-right: 20px;
+      margin: 20px;
       border-radius: 4px;
       border-right-style: none;
       border-left-style: none;
@@ -79,7 +83,7 @@
       var $game = {
         players: [],
         total_hands: 0,
-        current_hand: 0,
+        current_hand: 1,
         cards_per_hand: [],
         hands: [{
           wagers: [],
@@ -215,9 +219,77 @@
           }
           // create rows
           for (var i = 0; i < $game.players.length; i++) {
-            var newColumnCell = $("<td>").appendTo("tr");
+            var newColumnCell = $("<td>").appendTo("tr").attr("class", "playerField");
           }
+          // create submit cells
+          var newSubmitCell = $("<td>").appendTo("tr").attr("class", "submitColumn").css("background-color", "black");
+
           $("tr:even").css("background-color", "#181818");
+
+          startHand();
+        }
+      }
+      function startHand () {
+
+        var currentHand = $game.current_hand;
+        var currentRow = $("tr:nth-of-type(" + currentHand + ")");
+        var currentCells = $("tr:nth-of-type(" + currentHand + ") > td.playerField");
+        var $currentRowSubmitColumn = $("tr:nth-of-type(" + currentHand + ") > td:last-child");
+
+        // wagers variables
+        var wagerField = $("<input>").attr("type", "text").attr("placeholder", "Enter Wager").attr("class", "wagerInput").css("width", "100px").appendTo(currentCells);
+        var $submitWagers = $("<button>").attr("type", "text").text("Next").attr("id", "submitWagers").appendTo($currentRowSubmitColumn);
+        // scores variables
+        var scoreField = $("<input>").attr("type", "text").attr("placeholder", "Enter Score").attr("class", "scoreInput").css("width", "100px").appendTo(currentCells);
+        var $submitScores = $("<button>").attr("type", "text").text("Submit").attr("id", "submitScores").appendTo($currentRowSubmitColumn);
+
+        scoreField.hide();
+        $submitScores.hide();
+        $submitWagers.on("click", submitWagers);
+        $submitScores.on("click", submitScores);
+      }
+      function submitWagers (event) {
+        event.preventDefault();
+        var currentHand = $game.current_hand;
+        var wagerField = $("tr:nth-of-type(" + currentHand + 1 + ") > td.playerField > input.wagerInput");
+
+        var scoreField = $("input.scoreInput");
+        var $submitScores = $("button");
+
+        if (wagerField == "") {
+          alert("You must enter a number in each field.")
+        } else {
+          for (var i = 0; i < $game.players.length; i++) {
+            var wagerValues = $("tr:nth-of-type(" + currentHand + ") > td.playerField > input.wagerInput")[i].value;
+            $game.hands[currentHand - 1].wagers.push(wagerValues);
+          }
+          console.log($game.hands[currentHand - 1].wagers);
+          $("tr:nth-of-type(" + currentHand + ") > td.playerField > input.wagerInput").remove()
+          $("tr:nth-of-type(" + currentHand + ") > td > button#submitWagers").remove()
+          scoreField.show();
+          $submitScores.show();
+        }
+
+      }
+      function submitScores () {
+        event.preventDefault();
+        var scoreField = $("tr:nth-of-type(" + currentHand + ") > td.playerField > input.scoreInput");
+
+        if (scoreField =="") {
+          alert("You must enter a number in each field.")
+        } else {
+          for (var i = 0; i < $game.players.length; i++) {
+            var scoreFieldValue = $("tr:nth-of-type(" + currentHand + ") > td.playerField > input.scoreInput")[i].value;
+            $game.hands[currentHand - 1].scores.push(scoreFieldValue);
+          }
+          console.log($game.hands[currentHand - 1].scores);
+          scoreField.remove();
+          var scoreButton = $("tr:nth-of-type(" + currentHand +  ") > td > button#submitScores")
+          scoreButton.remove();
+          $game.current_hand == (currentHand + 1);
+          debugger
+
+          startHand();
         }
       }
 
