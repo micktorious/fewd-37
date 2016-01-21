@@ -85,17 +85,13 @@
         total_hands: 0,
         current_hand: 1,
         cards_per_hand: [],
-        hands: [{
-          wagers: [],
-          scores: []
-        }],
+        hands: [],
         totals: []
       };
 
       // global var's
       var playerTotal = $game.players.length;
       var totalHands = $game.total_hands;
-      var currentHand = $game.current_hand;
 
       // name prompts
       var $namePrompts = $("<div>").appendTo("body");
@@ -230,8 +226,9 @@
         }
       }
       function startHand () {
-
         var currentHand = $game.current_hand;
+        var newHandObject = {wagers: [], scores: []};
+        $game.hands.push(newHandObject)
         var currentRow = $("tr:nth-of-type(" + currentHand + ")");
         var currentCells = $("tr:nth-of-type(" + currentHand + ") > td.playerField");
         var $currentRowSubmitColumn = $("tr:nth-of-type(" + currentHand + ") > td:last-child");
@@ -260,19 +257,22 @@
           alert("You must enter a number in each field.")
         } else {
           for (var i = 0; i < $game.players.length; i++) {
+            var currentHand = $game.current_hand;
             var wagerValues = $("tr:nth-of-type(" + currentHand + ") > td.playerField > input.wagerInput")[i].value;
-            $game.hands[currentHand - 1].wagers.push(wagerValues);
+            var thisHand = $game.current_hand - 1;
+            $game.hands[thisHand].wagers.push(wagerValues);
           }
-          console.log($game.hands[currentHand - 1].wagers);
-          $("tr:nth-of-type(" + currentHand + ") > td.playerField > input.wagerInput").remove()
-          $("tr:nth-of-type(" + currentHand + ") > td > button#submitWagers").remove()
-          scoreField.show();
-          $submitScores.show();
+        console.log($game.current_hand);
+        $("tr:nth-of-type(" + currentHand + ") > td.playerField > input.wagerInput").remove()
+        $("tr:nth-of-type(" + currentHand + ") > td > button#submitWagers").remove()
+        scoreField.show();
+        $submitScores.show();
         }
 
       }
       function submitScores () {
         event.preventDefault();
+        var currentHand = $game.current_hand;
         var scoreField = $("tr:nth-of-type(" + currentHand + ") > td.playerField > input.scoreInput");
 
         if (scoreField =="") {
@@ -286,8 +286,9 @@
           scoreField.remove();
           var scoreButton = $("tr:nth-of-type(" + currentHand +  ") > td > button#submitScores")
           scoreButton.remove();
-          $game.current_hand == (currentHand + 1);
-          debugger
+
+          $game.current_hand += 1;
+          console.log($game.current_hand)
 
           startHand();
         }
