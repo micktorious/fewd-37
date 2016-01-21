@@ -148,13 +148,18 @@
       function createGameBoard (event) {
         event.preventDefault();
         var gameSize = $("#gameSizeField").val();
-        if (gameSize == "") {
+        // var $numericGame = $.isNumeric(gameSize);
+        if (gameSize.length == 0) {
           alert("You must enter a number between 1 and 20");
         } else if (gameSize == 0){
             alert("You must enter a number between 1 and 20");
+        } else if (gameSize < 0) {
+            alert("You think you're pretty clever? Enter a number between 1 and 20.")
         } else if (gameSize >= 21) {
             alert("You must enter a number between 1 and 20");
-        } else {
+        } else if ($.isNumeric(gameSize) == false) {
+            alert("You must enter a NUMBER between 1 and 20.");
+        } else if (gameSize > 1 && gameSize < 21) {
             $game.total_hands = gameSize;
 
             if ($game.total_hands == 1) {
@@ -221,7 +226,6 @@
           var newSubmitCell = $("<td>").appendTo("tr").attr("class", "submitColumn").css("background-color", "black");
 
           $("tr:even").css("background-color", "#181818");
-
           startHand();
         }
       }
