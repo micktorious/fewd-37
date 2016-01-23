@@ -256,9 +256,15 @@
 
         var scoreField = $("input.scoreInput");
         var $submitScores = $("button");
-
-        if (wagerField == "") {
+        var sumOfCurrentWagers = 0;
+        for (var i = 0; i < $game.players.length; i++) {
+          var $wagerValues = $("tr:nth-of-type(" + currentHand + ") > td.playerField > input.wagerInput")[i].value;
+          sumOfCurrentWagers = sumOfCurrentWagers + $wagerValues
+        }
+        if (wagerField.length == 0) {
           alert("You must enter a number in each field.")
+        } else if (sumOfCurrentWagers) {
+
         } else {
           for (var i = 0; i < $game.players.length; i++) {
             var currentHand = $game.current_hand;
