@@ -12,14 +12,17 @@
       background-color: black;
       color: white;
     }
-    #nameSection {
+    form {
       display: inline;
       align-content: center;
     }
+    div {
+      margin: 0 20% auto;
+    }
     ul {
       text-decoration: none;
-      align-content: center;
       list-style-type: none;
+      margin: 0 50%;
     }
     li {
       font-size: 1.5em;
@@ -63,13 +66,13 @@
       border-left-style: none;
       background-color: rgba(240, 240, 240, 0.10);
       padding: 8px;
-      margin: 8px;
       border-radius: 4px;
       text-align: center;
       color: white;
     }
     p {
       margin: 5px;
+      text-align: center;
     }
     button {
       font-size: 1em;
@@ -130,13 +133,12 @@
       var totalHands = $game.total_hands;
 
       // name prompts
-      var $nameListDiv = $("<div>").attr("class", "nameListDiv").appendTo("body");
-      var $nameList = $("<ul>").appendTo($nameListDiv);
       var $namePrompts = $("<div>").attr("id", "nameSection").appendTo("body");
       var $nameForm = $("<form>").appendTo($namePrompts)
       var $nameField = $("<input>").attr("placeholder", "Enter Player Names").css("width", "192px").attr("id", "nameField").appendTo($nameForm);
       var $submitNameButton = $("<button>").attr("id", "submitName").attr("type", "submit").text("Add").appendTo($nameForm);
       var $finalNameList = $("<button>").attr("type", "submit").text("Submit").appendTo($nameForm);
+      var $nameList = $("<ul>").appendTo("body");
 
       // game size prompts
       var $gameSizePrompts = $("<div>").appendTo("body");
@@ -179,8 +181,8 @@
       function submitNameList (event) {
         event.preventDefault();
         $namePrompts.hide();
-        $nameListDiv.hide();
         $gameSizePrompts.show();
+        $nameList.hide();
       }
 
       function createGameBoard (event) {
@@ -303,17 +305,12 @@
           var $wagerValues = $("tr:nth-of-type(" + currentHand + ") > td.playerField > input.wagerInput")[i].value;
           sumOfCurrentWagers = sumOfCurrentWagers + $wagerValues
         }
-        if (wagerField.length == 0) {
-          alert("You must enter a number in each field.")
-        } else if (sumOfCurrentWagers) {
-
-        } else {
-          for (var i = 0; i < $game.players.length; i++) {
-            var currentHand = $game.current_hand;
-            var wagerValues = $("tr:nth-of-type(" + currentHand + ") > td.playerField > input.wagerInput")[i].value;
-            var thisHand = $game.current_hand - 1;
-            $game.hands[thisHand].wagers.push(wagerValues);
-
+        for (var i = 0; i < $game.players.length; i++) {
+          var currentHand = $game.current_hand;
+          var wagerValues = $("tr:nth-of-type(" + currentHand + ") > td.playerField > input.wagerInput")[i].value;
+          var thisHand = $game.current_hand - 1;
+          $game.hands[thisHand].wagers.push(wagerValues);
+        }
         var currentCards = $game.cards_per_hand[currentHand - 1];
         var wagerFields = $("tr:nth-of-type(" + (currentHand) + ") > td.playerField > input.wagerInput");
         var sumOfWagers = 0;
@@ -440,8 +437,6 @@
           //   $(currentCells.
         }
       }
-    }
-  }
   </script>
 
 </body>
