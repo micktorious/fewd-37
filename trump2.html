@@ -5,11 +5,34 @@
     <title>Trump Game Board</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,800,700,300' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Kameron:700' rel='stylesheet' type='text/css'>
   <style media="screen">
     body {
       font-family: 'Open Sans', sans-serif;
       background-color: black;
       color: white;
+    }
+    form {
+      display: inline;
+      align-content: center;
+    }
+    ul {
+      text-decoration: none;
+      align-content: center;
+      list-style-type: none;
+    }
+    li {
+      font-size: 1.5em;
+      text-align: center;
+    }
+    h1 {
+      font-family: "Kameron", serif;
+      font-size: 700;
+      margin: 15px auto;
+      text-align: center;
+    }
+    table {
+      margin: 2em auto;
     }
     td {
       width: 100px;
@@ -39,14 +62,14 @@
       border-right-style: none;
       border-left-style: none;
       background-color: rgba(240, 240, 240, 0.10);
-      padding: 10px;
-      margin: 20px;
+      padding: 8px;
+      margin: 8px;
       border-radius: 4px;
       text-align: center;
       color: white;
     }
     p {
-      margin: 20px;
+      margin: 5px;
     }
     button {
       font-size: 1em;
@@ -74,6 +97,18 @@
     .hidden {
       display: none;
     }
+    .total {
+      text-decoration: none;
+      list-style-type: none;
+      font-size: 3em;
+      font-weight: 800;
+    }
+    .winningHand {
+      color: green;
+    }
+    .losingHand {
+      color: rgba(204, 0, 0, 1);;
+    }
 
   </style>
 
@@ -88,18 +123,19 @@
         hands: [],
         totals: []
       };
-
+      // Title
+      var trumpTitle = $("<h1>").text("TRUMP").appendTo("body");
       // global var's
       var playerTotal = $game.players.length;
       var totalHands = $game.total_hands;
 
       // name prompts
-      var $namePrompts = $("<div>").appendTo("body");
+      var $namePrompts = $("<div>").attr("id", "nameSection").appendTo("body");
       var $nameForm = $("<form>").appendTo($namePrompts)
       var $nameField = $("<input>").attr("placeholder", "Enter Player Names").css("width", "192px").attr("id", "nameField").appendTo($nameForm);
       var $submitNameButton = $("<button>").attr("id", "submitName").attr("type", "submit").text("Add").appendTo($nameForm);
-      var $finalNameList = $("<button>").attr("type", "submit").text("Submit").appendTo($namePrompts);
-      var $nameList = $("<ul>").appendTo($namePrompts);
+      var $finalNameList = $("<button>").attr("type", "submit").text("Submit").appendTo($nameForm);
+      var $nameList = $("<ul>").appendTo("body");
 
       // game size prompts
       var $gameSizePrompts = $("<div>").appendTo("body");
@@ -111,7 +147,7 @@
 
       // gameboard
       var $gameBoardDiv = $("<div>").attr("id", "gameBoard").appendTo("body");
-      var $gameBoard = $("<tbody>").appendTo($gameBoardDiv);
+      var $gameBoard = $("<table>").appendTo($gameBoardDiv);
 
 
       // initial hiding
@@ -159,7 +195,7 @@
             alert("You must enter a number between 1 and 20");
         } else if ($.isNumeric(gameSize) == false) {
             alert("You must enter a NUMBER between 1 and 20.");
-        } else if (gameSize > 1 && gameSize < 21) {
+        } else if (gameSize >= 1 && gameSize < 21) {
             $game.total_hands = gameSize;
 
             if ($game.total_hands == 1) {
@@ -205,7 +241,7 @@
             }
             $gameSizePrompts.hide();
           // build gameboard
-          var $gameBoard = $("tbody");
+          var $gameBoard = $("table");
           // create headers
           var handsHeader = $("<th>").appendTo($gameBoard);
           handsHeader.text("CARDS")
@@ -221,6 +257,10 @@
           // create rows
           for (var i = 0; i < $game.players.length; i++) {
             var newColumnCell = $("<td>").appendTo("tr").attr("class", "playerField");
+          }
+          // create the totals object
+          for (var i = 0; i < $game.players.length; i++) {
+            $game.totals.push(0);
           }
           // create submit cells
           var newSubmitCell = $("<td>").appendTo("tr").attr("class", "submitColumn").css("background-color", "black");
@@ -271,41 +311,136 @@
             var wagerValues = $("tr:nth-of-type(" + currentHand + ") > td.playerField > input.wagerInput")[i].value;
             var thisHand = $game.current_hand - 1;
             $game.hands[thisHand].wagers.push(wagerValues);
+
+        var currentCards = $game.cards_per_hand[currentHand - 1];
+        var wagerFields = $("tr:nth-of-type(" + (currentHand) + ") > td.playerField > input.wagerInput");
+        var sumOfWagers = 0;
+
+        for (var i = 0; i < $game.players.length; i++) {
+          // Grab the value of this wager.
+          var wagerValue = wagerFields[i].value;
+          // Check if this wager is valid.
+          if (wagerValue == "") {
+            alert("You must enter a wager in each field!");
+            return;
           }
-        console.log($game.current_hand);
+          if ($.isNumeric(wagerValue) == false) {
+            alert("You must enter NUMBERS!");
+            return;
+
+          }
+          if (wagerValue > currentCards) {
+            alert("Your bet is too high!");
+            return;
+          }
+          sumOfWagers += parseInt(wagerValue);
+
+          $game.hands[currentHand - 1].wagers.push(wagerValue);
+        }
+        if (sumOfWagers == currentCards) {
+          alert("Total wagers cannot be equal to " + currentCards + "!");
+          return;
+        }
+        transitionToScores();
+      }
+      function transitionToScores () {
+        //this works!
+        var currentHand = $game.current_hand;
         $("tr:nth-of-type(" + currentHand + ") > td.playerField > input.wagerInput").remove()
         $("tr:nth-of-type(" + currentHand + ") > td > button#submitWagers").remove()
+
+
+        var scoreField = $("input.scoreInput");
+        var $submitScores = $("button");
+
         scoreField.show();
         $submitScores.show();
-        }
-
       }
       function submitScores () {
         event.preventDefault();
         var currentHand = $game.current_hand;
-        var scoreField = $("tr:nth-of-type(" + currentHand + ") > td.playerField > input.scoreInput");
+        var currentCards = $game.cards_per_hand[currentHand - 1];
+        var scoreFields = $("tr:nth-of-type(" + currentHand + ") > td.playerField > input.scoreInput");
+        var sumOfScores = 0;
 
-        if (scoreField =="") {
-          alert("You must enter a number in each field.")
-        } else {
-          for (var i = 0; i < $game.players.length; i++) {
-            var scoreFieldValue = $("tr:nth-of-type(" + currentHand + ") > td.playerField > input.scoreInput")[i].value;
-            $game.hands[currentHand - 1].scores.push(scoreFieldValue);
+        for (var i = 0; i < $game.players.length; i++) {
+          // You are crashing here.
+          // scoreFields is not returning what you think it is.
+          var scoreValue = scoreFields[i].value;
+
+          if (scoreValue == "") {
+            alert("You must enter a wager in each field!");
+            return;
           }
-          console.log($game.hands[currentHand - 1].scores);
-          scoreField.remove();
-          var scoreButton = $("tr:nth-of-type(" + currentHand +  ") > td > button#submitScores")
-          scoreButton.remove();
+          if ($.isNumeric(scoreValue) == false) {
+            alert("You must enter NUMBERS!");
+            return;
+          }
 
-          $game.current_hand += 1;
-          console.log($game.current_hand)
+          sumOfScores += parseInt(scoreValue);
 
-          startHand();
+          $game.hands[currentHand - 1].scores.push(scoreValue);
+        }
+
+        if (sumOfScores != currentCards) {
+          alert("The total scores must = " + currentCards + "!");
+          return;
+        }
+
+        transitionToNextHand();
+      }
+      function transitionToNextHand () {
+        var currentHand = $game.current_hand;
+        updateTotals();
+
+        $game.current_hand += 1;
+        $("tr:nth-of-type(" + currentHand + ") > td.playerField > input.scoreInput").remove();
+        $("tr:nth-of-type(" + currentHand +  ") > td > button#submitScores").remove();
+        startHand();
+      }
+      function updateTotals () {
+        var currentHand = $game.current_hand;
+        var handBoost = [];;
+
+        for (var i = 0; i < $game.players.length; i++) {
+          var playerWager = parseInt($game.hands[currentHand - 1].wagers[i]);
+          var playerScore = parseInt($game.hands[currentHand - 1].scores[i]);
+
+          if (playerWager == playerScore) {
+            $game.totals[i] += (parseInt(10) + playerScore);
+            handBoost.push(parseInt(10) + playerScore);
+          }
+          if (playerWager < playerScore) {
+            $game.totals[i] += (playerScore - playerWager);
+            handBoost.push(playerScore - playerWager);
+          }
+          if (playerWager > playerScore) {
+            $game.totals[i] += (parseInt(0));
+            handBoost.push(parseInt(0));
+          }
+        }
+      console.log($game.totals);
+      showTotals(handBoost);
+      }
+      function showTotals (handBoost) {
+        var currentHand = $game.current_hand;
+        for (var i = 0; i < $game.players.length; i++) {
+          var currentCells = $("tr:nth-of-type(" + currentHand + ") > td.playerField")[i];
+
+          var playerWager = parseInt($game.hands[currentHand - 1].wagers[i]);
+          var playerScore = parseInt($game.hands[currentHand - 1].scores[i]);
+          var playerTotal = parseInt($game.totals[i]);
+
+          var scoreWriteup = $("<p>").text(playerScore + "/" + playerWager).attr("class", "subtext").appendTo(currentCells);
+          var playerDifference = $("<p>").text("+" + handBoost[i]).attr("class", "subtext").appendTo(currentCells);
+          var playerScoreTotal = $("<p>").attr("class", "total").text(playerTotal).appendTo(currentCells);
+          // if (handBoost >= parseInt(10)) {
+          //   $(currentCells.
         }
       }
+    }
+  }
+  </script>
 
-
-    </script>
-
-  </body>
+</body>
 </html>
