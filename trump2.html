@@ -11,18 +11,37 @@
       font-family: 'Open Sans', sans-serif;
       background-color: black;
       color: white;
+      width: 100%
     }
-    form {
-      margin: 0 50% auto;
-      width: 430px;
-      display: inline-block;
+    #nameFormDiv {
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 430px;
       align-content: center;
-      background: white;
+    }
+    #gameSizePrompts {
+      margin-left: auto;
+      margin-right: auto;
+      width: 430px;
+      align-content: center;
+    }
+    #nameFormDiv form {
+      margin-left: auto;
+      margin-right: auto;
+      width: 90%;
+    }
+    #gameSizePrompts form {
+      margin-left: auto;
+      margin-right: auto;
+      width: 79%;
     }
     ul {
       text-decoration: none;
       list-style-type: none;
-      margin: 0 50%;
+      list-style: none;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0px;
     }
     li {
       font-size: 1.5em;
@@ -59,25 +78,25 @@
     }
     input {
       font-size: 1em;
-      width: 75px;
+      min-width: 35%;
       height: 30px;
       border-top-style: none;
       border-right-style: none;
       border-left-style: none;
       background-color: rgba(240, 240, 240, 0.10);
       padding: 8px;
+      margin: 10px;
       border-radius: 4px;
       text-align: center;
       color: white;
     }
     p {
-      margin: 5px;
       text-align: center;
     }
     button {
       font-size: 1em;
       padding: 15px;
-      margin: 20px;
+      margin: 10px;
       border-radius: 4px;
       border-right-style: none;
       border-left-style: none;
@@ -87,12 +106,15 @@
       background-color: #009efa;
       color: white;
     }
+    .hidden {
+      background-color: #004771;
+      color: #001f30;
+      display: inline;
+
+    }
     .subtext {
       font-size: .75em;
       color: grey;
-    }
-    .hidden {
-      display: none;
     }
     .total {
       text-decoration: none;
@@ -100,11 +122,14 @@
       font-size: 3em;
       font-weight: 800;
       color: #cc0000;
+      margin: 0 0 auto;
     }
     .winningHand {
       color: #00CC00;
     }
-
+    .breakdown {
+      float:left;
+    }
   </style>
 
   </head>
@@ -125,19 +150,22 @@
       var totalHands = $game.total_hands;
 
       // name prompts
-      var $namePrompts = $("<div>").attr("id", "nameSection").appendTo("body");
-      var $nameForm = $("<form>").appendTo($namePrompts)
-      var $nameField = $("<input>").attr("placeholder", "Enter Player Names").css("width", "192px").attr("id", "nameField").appendTo($nameForm);
+      var $nameFormDiv = $("<div>").attr("id", "nameFormDiv").appendTo("body")
+      var $nameQuestion = $("<p>").text("Who is playing?").appendTo($nameFormDiv);
+      var $nameTip = $("<p>").attr("class", "subtext").text("(Minimum: 2 players)").appendTo($nameFormDiv);
+      var $nameList = $("<ul>").appendTo($nameFormDiv);
+      var $nameForm = $("<form>").appendTo($nameFormDiv);
+      var $nameField = $("<input>").attr("placeholder", "Enter Player Name").attr("id", "nameField").appendTo($nameForm);
       var $submitNameButton = $("<button>").attr("id", "submitName").attr("type", "submit").text("Add").appendTo($nameForm);
-      var $finalNameList = $("<button>").attr("type", "submit").text("Submit").appendTo($nameForm);
-      var $nameList = $("<ul>").appendTo("body");
+      var $finalNameList = $("<button>").attr("type", "submit").text("Submit").appendTo($nameForm).attr("class", "hidden");
+      $finalNameList.prop("disabled", true);
 
       // game size prompts
-      var $gameSizePrompts = $("<div>").appendTo("body");
+      var $gameSizePrompts = $("<div>").appendTo("body").attr("id", "gameSizePrompts");
       var $sizeQuestion = $("<p>").text("How many hands would you like to play?").appendTo($gameSizePrompts);
       var $sizeTip = $("<p>").attr("class", "subtext").text("(Enter 16 for regular game)").appendTo($gameSizePrompts);
       var $gameSizeForm = $("<form>").appendTo($gameSizePrompts);
-      var $gameSizeField = $("<input>").attr("placeholder", "Enter Game Size").css("width", "192px").attr("id", "gameSizeField").appendTo($gameSizeForm);
+      var $gameSizeField = $("<input>").attr("placeholder", "Enter Game Size").attr("id", "gameSizeField").appendTo($gameSizeForm);
       var $submitGameSize = $("<button>").attr("type", "submit").text("Start Game").attr("id", "submitGameSize").appendTo($gameSizeForm);
 
       // gameboard
@@ -146,7 +174,6 @@
 
 
       // initial hiding
-      $finalNameList.hide();
       $gameSizePrompts.hide();
 
       // event listeners
@@ -166,13 +193,14 @@
         }
 
         if ($game.players.length >= 2) {
-          $finalNameList.show();
+          $finalNameList.removeClass("hidden");
+          $finalNameList.prop("disabled", false);
         }
         nameField.val("")[0].focus();
       }
       function submitNameList (event) {
         event.preventDefault();
-        $namePrompts.hide();
+        $nameFormDiv.hide();
         $gameSizePrompts.show();
         $nameList.hide();
       }
@@ -319,15 +347,12 @@
             return;
           }
           sumOfWagers += parseInt(wagerValue);
-
-          $game.hands[currentHand - 1].wagers.push(wagerValue);
         }
         if (sumOfWagers == currentCards) {
           alert("Total wagers cannot be equal to " + currentCards + "!");
           return;
         }
         for (var i = 0; i < $game.players.length; i++) {
-          var currentHand = $game.current_hand;
           var wagerValues = $("tr:nth-of-type(" + currentHand + ") > td.playerField > input.wagerInput")[i].value;
           var thisHand = $game.current_hand - 1;
           $game.hands[thisHand].wagers.push(wagerValues);
@@ -369,13 +394,15 @@
           }
 
           sumOfScores += parseInt(scoreValue);
-
-          $game.hands[currentHand - 1].scores.push(scoreValue);
         }
 
         if (sumOfScores != currentCards) {
           alert("The total scores must = " + currentCards + "!");
           return;
+        }
+        for (var i = 0; i < $game.players.length; i++) {
+          var scoreValue = scoreFields[i].value;
+          $game.hands[currentHand - 1].scores.push(scoreValue);
         }
 
         transitionToNextHand();
@@ -416,14 +443,14 @@
         var currentHand = $game.current_hand;
         for (var i = 0; i < $game.players.length; i++) {
           var currentCells = $("tr:nth-of-type(" + currentHand + ") > td.playerField")[i];
-          var breakdown = $("<div>").appendTo(currentCells)
+          var breakdown = $("<div>").appendTo(currentCells).attr("class", "breakdown");
 
           var playerWager = parseInt($game.hands[currentHand - 1].wagers[i]);
           var playerScore = parseInt($game.hands[currentHand - 1].scores[i]);
           var playerTotal = parseInt($game.totals[i]);
 
-          var scoreWriteup = $("<p>").text(playerScore + "/" + playerWager).attr("class", "subtext").appendTo(breakdown);
-          var playerDifference = $("<p>").text("+" + handBoost[i]).attr("class", "subtext").appendTo(breakdown);
+          var scoreWriteup = $("<p>").text(playerScore + "/" + playerWager).attr("class", "subtext").css("font-weight", "light").appendTo(breakdown);
+          var playerDifference = $("<p>").text("+" + handBoost[i]).attr("class", "subtext").css("padding", "-2px").css("font-weight", "bold").appendTo(breakdown);
           var playerScoreTotal = $("<p>").attr("class", "total").text(playerTotal).appendTo(currentCells);
           }
         for (var i = 0; i < $game.players.length; i++) {
