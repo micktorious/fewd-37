@@ -6,12 +6,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,800,700,300' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Kameron:700' rel='stylesheet' type='text/css'>
+    <link rel='shortcut icon' href='trump_favicon.ico' type='image/x-icon'/ >
   <style media="screen">
     body {
       font-family: 'Open Sans', sans-serif;
       background-color: black;
       color: white;
       width: 100%
+      padding: 0;
     }
     #nameFormDiv {
       margin-left: auto;
@@ -106,6 +108,18 @@
       background-color: #009efa;
       color: white;
     }
+    footer {
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+    }
+    footer p {
+      color: #009efa;
+      text-align: center;
+      text-decoration: underline;
+      margin-left: auto;
+      margin-right: auto;
+    }
     .hidden {
       background-color: #004771;
       color: #001f30;
@@ -172,6 +186,10 @@
       var $gameBoardDiv = $("<div>").attr("id", "gameBoard").appendTo("body");
       var $gameBoard = $("<table>").appendTo($gameBoardDiv);
 
+      // footer
+      // var $footer = $("<footer>").appendTo("body");
+      // var $footerLink = $("<a>").appendTo($footer);
+      // var $footerText = $("<p>").text("THE RULES").appendTo($footerLink).attr("href", "http://google.com");
 
       // initial hiding
       $gameSizePrompts.hide();
