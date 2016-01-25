@@ -13,11 +13,11 @@
       color: white;
     }
     form {
-      display: inline;
+      margin: 0 50% auto;
+      width: 430px;
+      display: inline-block;
       align-content: center;
-    }
-    div {
-      margin: 0 20% auto;
+      background: white;
     }
     ul {
       text-decoration: none;
@@ -87,12 +87,6 @@
       background-color: #009efa;
       color: white;
     }
-    .winningHand {
-      color: green;
-    }
-    .losingHand {
-      color: rgba(204, 0, 0, 1);;
-    }
     .subtext {
       font-size: .75em;
       color: grey;
@@ -105,12 +99,10 @@
       list-style-type: none;
       font-size: 3em;
       font-weight: 800;
+      color: #cc0000;
     }
     .winningHand {
-      color: green;
-    }
-    .losingHand {
-      color: rgba(204, 0, 0, 1);;
+      color: #00CC00;
     }
 
   </style>
@@ -305,12 +297,6 @@
           var $wagerValues = $("tr:nth-of-type(" + currentHand + ") > td.playerField > input.wagerInput")[i].value;
           sumOfCurrentWagers = sumOfCurrentWagers + $wagerValues
         }
-        for (var i = 0; i < $game.players.length; i++) {
-          var currentHand = $game.current_hand;
-          var wagerValues = $("tr:nth-of-type(" + currentHand + ") > td.playerField > input.wagerInput")[i].value;
-          var thisHand = $game.current_hand - 1;
-          $game.hands[thisHand].wagers.push(wagerValues);
-        }
         var currentCards = $game.cards_per_hand[currentHand - 1];
         var wagerFields = $("tr:nth-of-type(" + (currentHand) + ") > td.playerField > input.wagerInput");
         var sumOfWagers = 0;
@@ -339,6 +325,12 @@
         if (sumOfWagers == currentCards) {
           alert("Total wagers cannot be equal to " + currentCards + "!");
           return;
+        }
+        for (var i = 0; i < $game.players.length; i++) {
+          var currentHand = $game.current_hand;
+          var wagerValues = $("tr:nth-of-type(" + currentHand + ") > td.playerField > input.wagerInput")[i].value;
+          var thisHand = $game.current_hand - 1;
+          $game.hands[thisHand].wagers.push(wagerValues);
         }
         transitionToScores();
       }
@@ -418,24 +410,33 @@
             handBoost.push(parseInt(0));
           }
         }
-      console.log($game.totals);
       showTotals(handBoost);
       }
       function showTotals (handBoost) {
         var currentHand = $game.current_hand;
         for (var i = 0; i < $game.players.length; i++) {
           var currentCells = $("tr:nth-of-type(" + currentHand + ") > td.playerField")[i];
+          var breakdown = $("<div>").appendTo(currentCells)
 
           var playerWager = parseInt($game.hands[currentHand - 1].wagers[i]);
           var playerScore = parseInt($game.hands[currentHand - 1].scores[i]);
           var playerTotal = parseInt($game.totals[i]);
 
-          var scoreWriteup = $("<p>").text(playerScore + "/" + playerWager).attr("class", "subtext").appendTo(currentCells);
-          var playerDifference = $("<p>").text("+" + handBoost[i]).attr("class", "subtext").appendTo(currentCells);
+          var scoreWriteup = $("<p>").text(playerScore + "/" + playerWager).attr("class", "subtext").appendTo(breakdown);
+          var playerDifference = $("<p>").text("+" + handBoost[i]).attr("class", "subtext").appendTo(breakdown);
           var playerScoreTotal = $("<p>").attr("class", "total").text(playerTotal).appendTo(currentCells);
-          // if (handBoost >= parseInt(10)) {
-          //   $(currentCells.
+          }
+        for (var i = 0; i < $game.players.length; i++) {
+          if (handBoost[i] >= parseInt(10)) {
+            var currentTotal = $("tr:nth-of-type(" + currentHand + ") > td.playerField > p.total")[i];
+            currentTotal.classList.add("winningHand");
+          }
         }
+      }
+      function announceWinner () {
+        var highestTotal = Math.max.apply(Math, $game.totals);
+        console.log(highestTotal)
+        var winningPlayer = $('td:contains(highestTotal)');
       }
   </script>
 
