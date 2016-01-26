@@ -95,6 +95,7 @@
     p {
       text-align: center;
     }
+
     button {
       font-size: 1em;
       padding: 15px;
@@ -129,6 +130,10 @@
     .subtext {
       font-size: .75em;
       color: grey;
+    }
+    .subtext-last {
+      font-size: .75em;
+      color: grey;
       margin-top: -10px;
     }
     .total {
@@ -144,6 +149,7 @@
     }
     .breakdown {
       float:left;
+      margin-top: 3px;
     }
   </style>
 
@@ -165,20 +171,20 @@
       var totalHands = $game.total_hands;
 
       // name prompts
-      var $nameFormDiv = $("<div>").attr("id", "nameFormDiv").appendTo("body")
+      var $nameFormDiv = $("<div>").attr("id", "nameFormDiv").appendTo("body");
       var $nameQuestion = $("<p>").text("Who is playing?").appendTo($nameFormDiv);
-      var $nameTip = $("<p>").attr("class", "subtext").text("(Minimum: 2 players)").appendTo($nameFormDiv);
+      var $nameTip = $("<p>").attr("class", "subtext-last").text("(Minimum: 2 players)").appendTo($nameFormDiv);
       var $nameList = $("<ul>").appendTo($nameFormDiv);
       var $nameForm = $("<form>").appendTo($nameFormDiv);
       var $nameField = $("<input>").attr("placeholder", "Enter Player Name").attr("id", "nameField").appendTo($nameForm);
       var $submitNameButton = $("<button>").attr("id", "submitName").attr("type", "submit").text("Add").appendTo($nameForm);
-      var $finalNameList = $("<button>").attr("type", "submit").text("Submit").appendTo($nameForm).attr("class", "hidden");
+      var $finalNameList = $("<button>").attr("type", "submit").text("Next").appendTo($nameForm).attr("class", "hidden");
       $finalNameList.prop("disabled", true);
 
       // game size prompts
       var $gameSizePrompts = $("<div>").appendTo("body").attr("id", "gameSizePrompts");
       var $sizeQuestion = $("<p>").text("How many hands would you like to play?").appendTo($gameSizePrompts);
-      var $sizeTip = $("<p>").attr("class", "subtext").text("(Enter 16 for regular game)").appendTo($gameSizePrompts);
+      var $sizeTip = $("<p>").attr("class", "subtext-last").text("(Enter 16 for regular game)").appendTo($gameSizePrompts);
       var $gameSizeForm = $("<form>").appendTo($gameSizePrompts);
       var $gameSizeField = $("<input>").attr("placeholder", "Enter Game Size").attr("id", "gameSizeField").appendTo($gameSizeForm);
       var $submitGameSize = $("<button>").attr("type", "submit").text("Start Game").attr("id", "submitGameSize").appendTo($gameSizeForm);
@@ -202,10 +208,10 @@
 
       function addName (event) {
         event.preventDefault();
-        var nameField = $("#nameField")
+        var nameField = $("#nameField");
         var name = $("#nameField").val();
         if (nameField.val().length < 1) {
-          alert("You must enter a name.")
+          alert("You must enter a name.");
         } else {
           $game.players.push(name);
           var newName = $("<li>").text(name).appendTo($nameList);
@@ -233,13 +239,13 @@
         } else if (gameSize == 0){
             alert("You must enter a number between 1 and 20");
         } else if (gameSize < 0) {
-            alert("You think you're pretty clever? Enter a number between 1 and 20.")
+            alert("You think you're pretty clever? Enter a number between 1 and 20.");
+        } else if (gameSize%1 != 0){
+ +            alert("You must enter a WHOLE NUMBER between 1 and 20. But nice try...");
         } else if (gameSize >= 21) {
             alert("You must enter a number between 1 and 20");
         } else if ($.isNumeric(gameSize) == false) {
             alert("You must enter a NUMBER between 1 and 20.");
-        } else if (gameSize%1 != 0){
-            alert("You mut enter a WHOLE NUMBER between 1 and 20. But nice try...")
         } else if (gameSize >= 1 && gameSize < 21) {
             $game.total_hands = gameSize;
 
@@ -268,17 +274,17 @@
             } else if ($game.total_hands == 12) {
                 $game.cards_per_hand = [6,5,4,3,2,1,1,2,3,4,5,6];
             } else if ($game.total_hands == 13) {
-                $game.cards_per_hand = [8,6,5,4,3,2,1,2,3,4,5,6,8];
+                $game.cards_per_hand = [7,6,5,4,3,2,1,2,3,4,5,6,7];
             } else if ($game.total_hands == 14) {
-                $game.cards_per_hand = [8,6,5,4,3,2,1,1,2,3,4,5,6,8];
+                $game.cards_per_hand = [7,6,5,4,3,2,1,1,2,3,4,5,6,7];
             } else if ($game.total_hands == 15) {
-                $game.cards_per_hand = [10,8,6,5,4,3,2,1,2,3,4,5,6,8,10];
+                $game.cards_per_hand = [8,7,6,5,4,3,2,1,2,3,4,5,6,7,8];
             } else if ($game.total_hands == 16) {
-                $game.cards_per_hand = [10,8,6,5,4,3,2,1,1,2,3,4,5,6,8,10];
+                $game.cards_per_hand = [8,7,6,5,4,3,2,1,1,2,3,4,5,6,7,8];
             } else if ($game.total_hands == 17) {
-                $game.cards_per_hand = [10,8,7,6,5,4,3,2,1,2,3,4,5,6,7,8,10];
+                $game.cards_per_hand = [9,8,7,6,5,4,3,2,1,2,3,4,5,6,7,8,9];
             } else if ($game.total_hands == 18) {
-                $game.cards_per_hand = [10,8,7,6,5,4,3,2,1,1,2,3,4,5,6,7,8,10];
+                $game.cards_per_hand = [9,8,7,6,5,4,3,2,1,1,2,3,4,5,6,7,8,9];
             } else if ($game.total_hands == 19) {
                 $game.cards_per_hand = [10,9,8,7,6,5,4,3,2,1,2,3,4,5,6,7,8,9,10];
             } else if ($game.total_hands == 20) {
@@ -289,9 +295,9 @@
           var $gameBoard = $("table");
           // create headers
           var handsHeader = $("<th>").appendTo($gameBoard);
-          handsHeader.text("CARDS")
+          handsHeader.text("CARDS");
           for (var i = 0; i < $game.players.length; i++) {
-            var $createHeaders = $("<th>").appendTo($gameBoard)
+            var $createHeaders = $("<th>").appendTo($gameBoard);
             $createHeaders.text($game.players[i]);
           }
           // create columns
@@ -317,7 +323,7 @@
       function startHand () {
         var currentHand = $game.current_hand;
         var newHandObject = {wagers: [], scores: []};
-        $game.hands.push(newHandObject)
+        $game.hands.push(newHandObject);
         var currentRow = $("tr:nth-of-type(" + currentHand + ")");
         var currentCells = $("tr:nth-of-type(" + currentHand + ") > td.playerField");
         var $currentRowSubmitColumn = $("tr:nth-of-type(" + currentHand + ") > td:last-child");
@@ -344,7 +350,7 @@
         var sumOfCurrentWagers = 0;
         for (var i = 0; i < $game.players.length; i++) {
           var $wagerValues = $("tr:nth-of-type(" + currentHand + ") > td.playerField > input.wagerInput")[i].value;
-          sumOfCurrentWagers = sumOfCurrentWagers + $wagerValues
+          sumOfCurrentWagers = sumOfCurrentWagers + $wagerValues;
         }
         var currentCards = $game.cards_per_hand[currentHand - 1];
         var wagerFields = $("tr:nth-of-type(" + (currentHand) + ") > td.playerField > input.wagerInput");
@@ -361,7 +367,9 @@
           if ($.isNumeric(wagerValue) == false) {
             alert("You must enter NUMBERS!");
             return;
-
+          }
+          if (wagerValue%1 != 0){
++            alert("You must enter a WHOLE NUMBER!");
           }
           if (wagerValue > currentCards) {
             alert("Your bet is too high!");
@@ -413,7 +421,9 @@
             alert("You must enter NUMBERS!");
             return;
           }
-
+          if (scoreValue%1 != 0){
++            alert("You must enter a WHOLE NUMBER!")
+          }
           sumOfScores += parseInt(scoreValue);
         }
 
@@ -471,7 +481,7 @@
           var playerTotal = parseInt($game.totals[i]);
 
           var scoreWriteup = $("<p>").text(playerScore + "/" + playerWager).attr("class", "subtext").css("font-weight", "light").appendTo(breakdown);
-          var playerDifference = $("<p>").text("+" + handBoost[i]).attr("class", "subtext").css("padding", "-2px").css("font-weight", "bold").appendTo(breakdown);
+          var playerDifference = $("<p>").text("+" + handBoost[i]).attr("class", "subtext-last").css("padding", "-2px").css("font-weight", "bold").appendTo(breakdown);
           var playerScoreTotal = $("<p>").attr("class", "total").text(playerTotal).appendTo(currentCells);
           }
         for (var i = 0; i < $game.players.length; i++) {
@@ -483,7 +493,7 @@
       }
       function announceWinner () {
         var highestTotal = Math.max.apply(Math, $game.totals);
-        console.log(highestTotal)
+        console.log(highestTotal);
         var winningPlayer = $('td:contains(highestTotal)');
       }
   </script>
