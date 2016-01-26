@@ -129,6 +129,7 @@
     .subtext {
       font-size: .75em;
       color: grey;
+      margin-top: -10px;
     }
     .total {
       text-decoration: none;
@@ -237,6 +238,8 @@
             alert("You must enter a number between 1 and 20");
         } else if ($.isNumeric(gameSize) == false) {
             alert("You must enter a NUMBER between 1 and 20.");
+        } else if (gameSize%1 != 0){
+            alert("You mut enter a WHOLE NUMBER between 1 and 20. But nice try...")
         } else if (gameSize >= 1 && gameSize < 21) {
             $game.total_hands = gameSize;
 
@@ -265,17 +268,17 @@
             } else if ($game.total_hands == 12) {
                 $game.cards_per_hand = [6,5,4,3,2,1,1,2,3,4,5,6];
             } else if ($game.total_hands == 13) {
-                $game.cards_per_hand = [7,6,5,4,3,2,1,2,3,4,5,6,7];
+                $game.cards_per_hand = [8,6,5,4,3,2,1,2,3,4,5,6,8];
             } else if ($game.total_hands == 14) {
-                $game.cards_per_hand = [7,6,5,4,3,2,1,1,2,3,4,5,6,7];
+                $game.cards_per_hand = [8,6,5,4,3,2,1,1,2,3,4,5,6,8];
             } else if ($game.total_hands == 15) {
-                $game.cards_per_hand = [8,7,6,5,4,3,2,1,2,3,4,5,6,7,8];
+                $game.cards_per_hand = [10,8,6,5,4,3,2,1,2,3,4,5,6,8,10];
             } else if ($game.total_hands == 16) {
-                $game.cards_per_hand = [8,7,6,5,4,3,2,1,1,2,3,4,5,6,7,8];
+                $game.cards_per_hand = [10,8,6,5,4,3,2,1,1,2,3,4,5,6,8,10];
             } else if ($game.total_hands == 17) {
-                $game.cards_per_hand = [9,8,7,6,5,4,3,2,1,2,3,4,5,6,7,8,9];
+                $game.cards_per_hand = [10,8,7,6,5,4,3,2,1,2,3,4,5,6,7,8,10];
             } else if ($game.total_hands == 18) {
-                $game.cards_per_hand = [9,8,7,6,5,4,3,2,1,1,2,3,4,5,6,7,8,9];
+                $game.cards_per_hand = [10,8,7,6,5,4,3,2,1,1,2,3,4,5,6,7,8,10];
             } else if ($game.total_hands == 19) {
                 $game.cards_per_hand = [10,9,8,7,6,5,4,3,2,1,2,3,4,5,6,7,8,9,10];
             } else if ($game.total_hands == 20) {
